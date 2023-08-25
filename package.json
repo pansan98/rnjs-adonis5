@@ -8,7 +8,9 @@
     "start": "node server.js",
     "test": "node ace test",
     "lint": "eslint . --ext=.ts",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "dev-serve": "nodemon server.ts",
+    "dev-webpack": "webpack --progress --config webpack.dev.js --watch"
   },
   "eslintConfig": {
     "extends": [
@@ -57,6 +59,7 @@
     "eslint-plugin-adonis": "^2.1.1",
     "eslint-plugin-prettier": "^5.0.0",
     "glob": "^10.3.3",
+    "nodemon": "^3.0.1",
     "pino-pretty": "^10.2.0",
     "postcss": "^8.4.28",
     "postcss-import": "^15.1.0",
