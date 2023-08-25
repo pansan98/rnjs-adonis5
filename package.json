@@ -88,7 +88,6 @@
     "@adonisjs/session": "^6.4.0",
     "@adonisjs/shield": "^7.1.1",
     "@adonisjs/view": "^6.2.0",
-    "adonis-pug": "^4.2.0",
     "buffer-from": "^1.1.2",
     "camel-case": "^4.1.2",
     "change-case": "^4.1.2",

@@ -569,15 +569,6 @@
           "description": "Disable locks acquired to run migrations safely"
         }
       ]
-    },
-    "make:pug": {
-      "settings": {},
-      "commandPath": "adonis-pug/src/Commands/Pug",
-      "commandName": "make:pug",
-      "description": "make view for pug",
-      "args": [],
-      "aliases": [],
-      "flags": []
     }
   },
   "aliases": {}
