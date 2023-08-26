@@ -9,7 +9,7 @@
     "test": "node ace test",
     "lint": "eslint . --ext=.ts",
     "format": "prettier --write .",
-    "dev-serve": "nodemon server.ts",
+    "dev-serve": "nodemon ace serve",
     "dev-webpack": "webpack --progress --config webpack.dev.js --watch"
   },
   "eslintConfig": {
@@ -59,6 +59,7 @@
     "eslint-plugin-adonis": "^2.1.1",
     "eslint-plugin-prettier": "^5.0.0",
     "glob": "^10.3.3",
+    "mini-css-extract-plugin": "^2.7.6",
     "nodemon": "^3.0.1",
     "pino-pretty": "^10.2.0",
     "postcss": "^8.4.28",
@@ -91,6 +92,7 @@
     "@adonisjs/session": "^6.4.0",
     "@adonisjs/shield": "^7.1.1",
     "@adonisjs/view": "^6.2.0",
+    "axios": "^1.4.0",
     "buffer-from": "^1.1.2",
     "camel-case": "^4.1.2",
     "change-case": "^4.1.2",
