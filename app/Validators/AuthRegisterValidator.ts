@@ -28,7 +28,17 @@ export default class AuthRegisterValidator {
 			rules.required()
 		]),
 		login_id: schema.string([
-			rules.required(), rules.minLength(4), rules.maxLength(50), rules.alphaNum({allow: ['dash']}), rules.dbexists(['users', 'login_id'])
+			rules.required(),
+			rules.minLength(4),
+			rules.maxLength(50),
+			rules.alphaNum({allow: ['dash']}),
+			rules.unique({
+				table: 'users',
+				column: 'login_id',
+				where: {
+					delete_flag: 0
+				}
+			})
 		]),
 		password: schema.string([
 			rules.required(), rules.minLength(6), rules.maxLength(100), rules.alphaNum(), rules.confirmed('password_confirmation')
@@ -37,7 +47,14 @@ export default class AuthRegisterValidator {
 			rules.required()
 		]),
 		email: schema.string([
-			rules.email(), rules.dbexists(['users', 'email'])
+			rules.email(),
+			rules.unique({
+				table: 'users',
+				column: 'email',
+				where: {
+					delete_flag: 0
+				}
+			})
 		])
 	})
 
