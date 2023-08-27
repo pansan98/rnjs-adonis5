@@ -3,6 +3,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import BaseController from './BasesController'
 import AuthRegister from 'App/Validators/AuthRegisterValidator'
 import AuthLogin from 'App/Validators/AuthLoginValidator'
+import ProfileValidator from 'App/Validators/ProfileValidator'
 import AuthHelper from 'App/Helpers/Auth'
 import ValidateWrap from 'App/Helpers/ValidateWrap'
 import UserModel from 'App/Models/User'
@@ -77,5 +78,34 @@ export default class AuthController extends BaseController {
 		const qs = ctx.request.qs()
 		const labels = UserModel.labels(qs.label)
 		return this.success(ctx, {labels: labels})
+	}
+
+	public async profile(ctx: HttpContextContract) {
+		const idf = await ctx.session.get('identify', null)
+		const user = await UserModel.profile(idf)
+		if(user) {
+			try {
+				await ctx.request.validate(ProfileValidator)
+			} catch(error) {
+				const errorwrap = ValidateWrap.apiwrap(error.messages)
+				return this.fail(ctx, {errors: errorwrap})
+			}
+
+			const posts = ctx.request.all()
+			user.merge(UserModel.filter(posts, UserModel.fillable))
+			if(posts.two_authorize) {
+				user.merge({
+					two_authorize_flag: true
+				})
+			} else {
+				user.merge({
+					two_authorize_flag: false
+				})
+			}
+
+			await user.save()
+		}
+
+		return this.fail(ctx)
 	}
 }

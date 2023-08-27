@@ -14,7 +14,7 @@ export default class extends BaseSchema {
       table.integer('gender')
       table.string('identify_code', 100).notNullable().unique()
       table.text('social_uniq')
-      table.integer('two_authorize_flag', 1).defaultTo(0)
+      table.boolean('two_authorize_flag').defaultTo(false)
       table.integer('active_flag', 1).defaultTo(0)
       table.integer('delete_flag', 1).defaultTo(0)
       table.timestamps()

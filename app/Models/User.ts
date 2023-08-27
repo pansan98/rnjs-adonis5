@@ -59,7 +59,7 @@ export default class User extends compose(BaseModel, Common) {
 	public active_sharing: HasOne<typeof SharingLogin>
 
 	@column()
-	public two_authorize_flag: number
+	public two_authorize_flag: boolean
 
 	@column()
 	public active_flag: number
