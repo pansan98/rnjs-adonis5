@@ -66,4 +66,16 @@ export default class AuthController extends BaseController {
 		})
 		return this.success(ctx)
 	}
+
+	public async user(ctx: HttpContextContract) {
+		const idf = await ctx.session.get('identify', null)
+		const user = await UserModel.profile(idf)
+		return this.success(ctx, {user: user?.serialize()})
+	}
+
+	public async labels(ctx: HttpContextContract) {
+		const qs = ctx.request.qs()
+		const labels = UserModel.labels(qs.label)
+		return this.success(ctx, {labels: labels})
+	}
 }

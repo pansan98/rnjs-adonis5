@@ -12,6 +12,12 @@ export default class User extends compose(BaseModel, Common) {
 
 	public static fillable = ['username', 'login_id', 'email', 'password', 'profession', 'gender', 'identify_code', 'social_uniq', 'thumbnail_id', 'active_sharing_id', 'two_authorize_flag', 'active_flag', 'delete_flag']
 
+	public static gender = {
+		1: '男性',
+		2: '女性',
+		3: 'カスタム'
+	}
+
 	@column({ isPrimary: true })
 	public id: number
 
@@ -100,5 +106,16 @@ export default class User extends compose(BaseModel, Common) {
 			.where('users.identify_code', idf)
 			.where('users.delete_flag', 0)
 			.first()
+	}
+
+	public static async labels(label: string) {
+		let labels = {}
+		switch(label) {
+			case 'gender':
+				labels = User.gender
+				break
+		}
+
+		return labels
 	}
 }

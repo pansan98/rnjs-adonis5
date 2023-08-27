@@ -4,7 +4,7 @@ Route.group(() => {
     Route.post('/login', 'AuthController.login')
     Route.post('/logout', 'AuthController.logout')
     Route.post('/register', 'AuthController.register')
-    Route.post('/forgot', 'AuthController.register')
+    Route.post('/forgot', 'AuthController.forgot')
     Route.post('/profile', 'AuthController.profile')
     Route.post('/profile/thumbnail/destroy', 'AuthController.thumbnail_destroy')
     Route.get('/user', 'AuthController.user')
