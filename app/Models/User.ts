@@ -88,4 +88,17 @@ export default class User extends compose(BaseModel, Common) {
 		params = User.assign(params, {identify_code: String.random(20)})
 		return await User.create(User.filter(params, User.fillable))
 	}
+
+	public static async verify(ipw: string, user: User) {
+		return await Hash.verify(user.password, ipw)
+	}
+
+	public static async profile(idf: string) {
+		return await User.query()
+			.select('users.*', 'medias.path AS thumbnail_path')
+			.leftJoin('medias', 'users.thumbnail_id', '=', 'medias.id')
+			.where('users.identify_code', idf)
+			.where('users.delete_flag', 0)
+			.first()
+	}
 }
