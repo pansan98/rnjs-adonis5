@@ -1,6 +1,8 @@
 import { schema, CustomMessages, rules } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
+import UserModel from 'App/Models/User'
+
 export default class AuthRegisterValidator {
 	constructor(protected ctx: HttpContextContract) {}
 
@@ -25,15 +27,17 @@ export default class AuthRegisterValidator {
    */
 	public schema = schema.create({
 		username: schema.string([
-			rules.required()
+			rules.required(),
+			rules.trim()
 		]),
 		login_id: schema.string([
 			rules.required(),
+			rules.trim(),
 			rules.minLength(4),
 			rules.maxLength(50),
 			rules.alphaNum({allow: ['dash']}),
 			rules.unique({
-				table: 'users',
+				table: UserModel.table,
 				column: 'login_id',
 				where: {
 					delete_flag: 0
@@ -41,15 +45,16 @@ export default class AuthRegisterValidator {
 			})
 		]),
 		password: schema.string([
-			rules.required(), rules.minLength(6), rules.maxLength(100), rules.alphaNum(), rules.confirmed('password_confirmation')
+			rules.required(), rules.trim(), rules.minLength(6), rules.maxLength(100), rules.alphaNum(), rules.confirmed('password_confirmation')
 		]),
 		password_confirmation: schema.string([
 			rules.required()
 		]),
-		email: schema.string([
+		emai: schema.string.nullableAndOptional([
+			rules.trim(),
 			rules.email(),
 			rules.unique({
-				table: 'users',
+				table: UserModel.table,
 				column: 'email',
 				where: {
 					delete_flag: 0
@@ -72,17 +77,17 @@ export default class AuthRegisterValidator {
 	public messages: CustomMessages = {
 		'username.required': 'Nick nameは必須です。',
 		'login_id.required': 'ログインIDは必須です。',
-		'login_id.vfdbexists': 'このログインIDは利用できません。',
-		'login_id.vfaplhadash': '英数字、-、_のみ使用できます。',
-		'login_id.min': 'ログインIDは4文字以上です。',
-		'login_id.max': 'ログインIDは50文字までです。',
+		'login_id.unique': 'このログインIDは利用できません。',
+		'login_id.alphaNum': '英数字、-、_のみ使用できます。',
+		'login_id.minLength': 'ログインIDは4文字以上です。',
+		'login_id.maxLength': 'ログインIDは50文字までです。',
 		'password.required': 'Passwordは必須です。',
-		'password.min': 'パスワードは6文字以上です。',
-		'password.max': 'パスワードは100文字までです。',
-		'password.vfalphanum': 'パスワードは英数字のみです。',
+		'password.minLength': 'パスワードは6文字以上です。',
+		'password.maxLength': 'パスワードは100文字までです。',
+		'password.alphaNum': 'パスワードは英数字のみです。',
 		'password.confirmed': 'パスワードが一致しません。',
 		'password_confirmation.required': 'パスワードretry',
 		'email.email': 'Emailを正しく入力してください。',
-		'email.vfdbexists': 'このEmailは利用できません。'
+		'email.unique': 'このEmailは利用できません。'
 	}
 }
