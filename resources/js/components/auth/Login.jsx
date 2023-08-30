@@ -212,10 +212,10 @@ class Login extends React.Component {
 						</p>
 					</div>
 					<p>
-						<Link className="text-center" to="/auth/register">Register</Link>
+						<Link className="text-center" to={Config.links.auth.register}>Register</Link>
 					</p>
 					<p className="mb-0">
-						<Link className="text-center" to="/auth/forgot">forgot for password</Link>
+						<Link className="text-center" to={Config.links.auth.forgot}>forgot for password</Link>
 					</p>
 				</div>
 			)
@@ -224,7 +224,7 @@ class Login extends React.Component {
 				<div className="card-body">
 					<p className="text-center">ログインしました。</p>
 					<p className="mb-0">
-						<Link className="text-center" to="/home">Home</Link>
+						<Link className="text-center" to={Config.links.home}>Home</Link>
 					</p>
 				</div>
 			)

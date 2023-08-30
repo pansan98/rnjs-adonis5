@@ -92,16 +92,13 @@ export default class AuthController extends BaseController {
 			}
 
 			const posts = ctx.request.all()
-			user.merge(UserModel.filter(posts, UserModel.fillable))
-			if(posts.two_authorize) {
-				user.merge({
-					two_authorize_flag: true
-				})
-			} else {
-				user.merge({
-					two_authorize_flag: false
-				})
+			console.log(posts)
+			let two_authorize = false
+			if(posts.two_authorize.length) {
+				two_authorize = true
 			}
+			posts.two_authorize_flag = two_authorize
+			user.merge(UserModel.filter(posts, UserModel.fillable))
 
 			await user.save()
 			return this.success(ctx, {

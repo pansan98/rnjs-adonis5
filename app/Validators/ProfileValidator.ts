@@ -32,8 +32,8 @@ export default class ProfileValidator {
 			rules.email()
 		]),
 		profession: schema.string.nullable({trim: true}),
-		gender: schema.string.nullableAndOptional([
-			rules.notIn([1, 2, 3])
+		gender: schema.number.nullable([
+			rules.range(1, 3)
 		]),
 		thumbnail: schema.array().anyMembers(),
 		two_authorize: schema.array().members(schema.number())

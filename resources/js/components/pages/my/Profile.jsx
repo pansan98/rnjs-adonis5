@@ -126,7 +126,7 @@ class Profile extends React.Component {
 			username: this.state.f_name,
 			email: this.state.f_email,
 			profession: this.state.f_profession,
-			gender: this.state.f_gender,
+			gender: parseInt(this.state.f_gender),
 			thumbnail: this.state.f_thumbnail,
 			two_authorize: this.state.f_two_authorize,
 			credentials: 'same-origin'

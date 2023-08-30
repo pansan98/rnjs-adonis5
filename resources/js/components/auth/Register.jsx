@@ -132,7 +132,7 @@ class Register extends React.Component {
 						<button type="submit" className="btn btn-primary btn-block" onClick={(e) => this.onSave(e)}>Register</button>
 					</div>
 					<p className="mb-0">
-						<Link to="/auth/login" className="text-center">Login</Link>
+						<Link to={Config.link.auth.login} className="text-center">Login</Link>
 					</p>
 				</div>
 			)
@@ -141,7 +141,7 @@ class Register extends React.Component {
 				<div className="card-body">
 					<p className="text-center">登録が完了しました。<br/>ログインページでログインしてください。</p>
 					<p className="mb-0">
-						<Link to="/auth/login" className="text-center">Login</Link>
+						<Link to={Config.links.auth.login} className="text-center">Login</Link>
 					</p>
 				</div>
 			)
