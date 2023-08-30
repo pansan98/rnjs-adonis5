@@ -35,8 +35,8 @@ export default class ProfileValidator {
 		gender: schema.string.nullableAndOptional([
 			rules.notIn([1, 2, 3])
 		]),
-		thumbnail: schema.string.nullable(),
-		two_authorize: schema.number.nullable()
+		thumbnail: schema.array().anyMembers(),
+		two_authorize: schema.array().members(schema.number())
 	})
 
 	/**
@@ -50,5 +50,10 @@ export default class ProfileValidator {
 	 * }
 	 *
 	 */
-	public messages: CustomMessages = {}
+	public messages: CustomMessages = {
+		'username.required': '名前は必須です。',
+		'username.maxLength': '名前は100文字以内で入力してください。',
+		'email.email': 'Eメールは正しく入力してください。',
+		'gender.notIn': '値が不正です。'
+	}
 }

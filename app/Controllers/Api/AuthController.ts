@@ -76,7 +76,7 @@ export default class AuthController extends BaseController {
 
 	public async labels(ctx: HttpContextContract) {
 		const qs = ctx.request.qs()
-		const labels = UserModel.labels(qs.label)
+		const labels = await UserModel.labels(qs.label)
 		return this.success(ctx, {labels: labels})
 	}
 
@@ -104,6 +104,9 @@ export default class AuthController extends BaseController {
 			}
 
 			await user.save()
+			return this.success(ctx, {
+				path: ''
+			})
 		}
 
 		return this.fail(ctx)

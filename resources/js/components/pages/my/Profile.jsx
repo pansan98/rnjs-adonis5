@@ -80,7 +80,7 @@ class Profile extends React.Component {
 					})
 				}
 				this.setState({forms: {
-					gender: labels,
+					gender: labels
 				}})
 			}
 		}).catch((e) => {

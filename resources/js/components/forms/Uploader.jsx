@@ -21,7 +21,7 @@ class Uploader extends React.Component {
 					this.onUploaded()
 				}
 			}
-		});
+		})
 	}
 
 	onDragover(e) {

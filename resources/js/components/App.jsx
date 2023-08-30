@@ -39,7 +39,7 @@ class App extends React.Component {
 			<BrowserRouter>
 				<React.Fragment>
 					<Routes>
-						<Route path="/home" exact element={<Home />} />
+						<Route path="/" exact element={<Home />} />
 						<Route path="/contact" element={<Contact />} />
 						<Route path="/shop" element={<Shop />} />
 						<Route path="/shop/create" element={<ShopCreate page="追加"/>} />

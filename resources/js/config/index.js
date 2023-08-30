@@ -7,7 +7,7 @@ const Config = {
 			register: '/auth/register',
 			forgot: '/auth/forgot'
 		},
-		home: '/home',
+		home: '/',
 		contact: '/contact',
 		stopWatch: 'stop-watch',
 		profile: '/my/profile',
