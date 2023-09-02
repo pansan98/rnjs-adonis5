@@ -1,17 +1,17 @@
 import React from 'react';
 import axios from 'axios';
-import {Link} from 'react-router-dom';
+import {Link} from 'react-router-dom'
 
-import Config from '../../../config';
+import Config from '../../../config'
 
-import Loader from '../../common/Loader';
+import Loader from '../../common/Loader'
 import Base from '../Base';
 
-import Text from '../../forms/Text';
-import Radio from '../../forms/Radio';
-import Checkbox from '../../forms/Checkbox';
-import Uploader from '../../forms/Uploader';
-import Error from '../../forms/Error';
+import Text from '../../forms/Text'
+import Radio from '../../forms/Radio'
+import Checkbox from '../../forms/Checkbox'
+import Uploader from '../../forms/Uploader'
+import Error from '../../forms/Error'
 
 class Profile extends React.Component {
 	constructor(props) {

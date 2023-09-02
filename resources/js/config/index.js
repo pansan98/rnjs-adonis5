@@ -2,20 +2,31 @@
 
 const Config = {
 	links : {
+		home: '/',
 		auth: {
 			login: '/auth/login',
 			register: '/auth/register',
-			forgot: '/auth/forgot'
+			forgot: '/auth/forgot',
+			authorize: '/auth/authorize/:identify/:token',
+			password: '/auth/password/:identify/:token'
 		},
-		home: '/',
 		contact: '/contact',
 		stopWatch: 'stop-watch',
 		profile: '/my/profile',
+		follow: '/my/follows',
 		shop: {
-			home: '/shop'	
+			home: '/shop',
+			create: '/shop/create',
+			edit: '/shop/edit/:code',
+			views: '/shop/views/:code'
 		},
 		ec: {
-			home: '/ec'
+			home: '/ec',
+			product: '/ec/product/:code',
+			cart: '/ec/cart',
+			favorites: '/ec/favorites',
+			history: '/ec/history',
+			review: '/ec/review/:code'
 		}
 	},
 	api: {

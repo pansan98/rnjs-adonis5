@@ -1,12 +1,14 @@
 import React from 'react'
 import {createRoot} from 'react-dom/client'
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
+import Config from '../config'
 
 // Pages
 import Home from './pages/Home'
 import Contact from './pages/Contact'
 import StopWatch from './pages/practice/StopWatch'
 import MyProfile from './pages/my/Profile'
+import MyFollows from './pages/my/Follows'
 import Shop from './pages/Shop'
 import ShopCreate from './pages/shop/Edit'
 import ShopEdit from './pages/shop/ParamsEdit'
@@ -39,28 +41,29 @@ class App extends React.Component {
 			<BrowserRouter>
 				<React.Fragment>
 					<Routes>
-						<Route path="/" exact element={<Home />} />
-						<Route path="/contact" element={<Contact />} />
-						<Route path="/shop" element={<Shop />} />
-						<Route path="/shop/create" element={<ShopCreate page="追加"/>} />
-						<Route path="/shop/edit/:code" element={<ShopEdit />} />
-						<Route path="/shop/views/:code" element={<ShopViews />} />
-						<Route path="/ec" element={<Ec />} />
-						<Route path="/ec/product/:code" element={<EcDetail />} />
-						<Route path="/ec/cart" element={<EcCart />} />
-						<Route path="/ec/favorites" element={<EcFavorites />} />
-						<Route path="/ec/history" element={<EcHistory />} />
-						<Route path="/ec/review/:code" element={<EcReview />} />
+						<Route path={Config.links.home} exact element={<Home />} />
+						<Route path={Config.links.contact} element={<Contact />} />
+						<Route path={Config.links.shop.home} element={<Shop />} />
+						<Route path={Config.links.shop.create} element={<ShopCreate page="追加"/>} />
+						<Route path={Config.links.shop.edit} element={<ShopEdit />} />
+						<Route path={Config.links.shop.views} element={<ShopViews />} />
+						<Route path={Config.links.ec.home} element={<Ec />} />
+						<Route path={Config.links.ec.product} element={<EcDetail />} />
+						<Route path={Config.links.ec.cart} element={<EcCart />} />
+						<Route path={Config.links.ec.favorites} element={<EcFavorites />} />
+						<Route path={Config.links.ec.history} element={<EcHistory />} />
+						<Route path={Config.links.ec.review} element={<EcReview />} />
 						<Route path="/event" element={<Event />} />
 						<Route path="/event/create" element={<EventEdit />} />
 						<Route path="/event/category" element={<EventCategory />} />
-						<Route path="/my/profile" element={<MyProfile />} />
+						<Route path={Config.links.profile} element={<MyProfile />} />
+						<Route path={Config.links.follow} element={<MyFollows />} />
 						<Route path="/practice/stop-watch" element={<StopWatch />} />
-						<Route path="/auth/login" element={<Login />} />
-						<Route path="/auth/register" element={<Register />} />
-						<Route path="/auth/forgot" element={<Forgot />} />
-						<Route path="/auth/authorize/:identify/:token" element={<Authorize />} />
-						<Route path="/auth/password/:identify/:token" element={<Password />} />
+						<Route path={Config.links.auth.login} element={<Login />} />
+						<Route path={Config.links.auth.register} element={<Register />} />
+						<Route path={Config.links.auth.forgot} element={<Forgot />} />
+						<Route path={Config.links.auth.authorize} element={<Authorize />} />
+						<Route path={Config.links.auth.password} element={<Password />} />
 					</Routes>
 				</React.Fragment>
 			</BrowserRouter>

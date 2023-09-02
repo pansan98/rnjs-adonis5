@@ -2,7 +2,7 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
 import Loader from './Loader'
-import Config from '../../config';
+import Config from '../../config'
 
 class GlobalNav extends React.Component {
 	constructor(props) {
@@ -44,6 +44,11 @@ class GlobalNav extends React.Component {
 					</li>
 				</ul>
 				<ul className="navbar-nav ml-auto">
+					<li className="nav-item mr-1">
+						<Link to={Config.links.follow} className="nav-link btn btn-default">
+							<i className="fas fa-users"></i>
+						</Link>
+					</li>
 					<li className="nav-item">
 						<button
 							className="nav-link btn btn-default"

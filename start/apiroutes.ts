@@ -12,3 +12,10 @@ Route.group(() => {
 
     Route.post('/sharing/use', 'SharingController.use')
 }).prefix('/api/auth').namespace('App/Controllers/Api')
+
+Route.group(() => {
+    Route.post('/add/:idf', 'FollowsController.add')
+        .where('idf', /^[a-zA-Z0-9]$/)
+    Route.post('/remove/:idf', 'FollowsController.remove')
+        .where('idf', /^[a-zA-Z0-9]$/)
+}).prefix('/api/follow').namespace('App/Controller/Api')
