@@ -10,7 +10,7 @@ export default class extends BaseSchema {
       table.string('type', 100)
       table.string('ext', 100)
       table.bigInteger('size')
-      table.text('path')
+      table.text('path', 'long')
       table.string('name', 251)
       table.string('identify_code', 191).unique()
       table.integer('media_group_id').unsigned().references('id').inTable('media_groups').onDelete('SET NULL')

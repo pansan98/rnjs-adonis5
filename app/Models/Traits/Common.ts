@@ -1,4 +1,5 @@
 import { BaseModel } from '@ioc:Adonis/Lucid/Orm'
+import Database, { DatabaseQueryBuilderContract } from '@ioc:Adonis/Lucid/Database'
 import { NormalizeConstructor } from '@ioc:Adonis/Core/Helpers'
 import _ from 'lodash'
 
@@ -25,11 +26,16 @@ const Common = <T extends NormalizeConstructor<typeof BaseModel>>(
 			return params
 		}
 
-		public static assign(params?: {}, merge?: {}) {
+		public static assign(params?: {}, merge?: {}): {} {
 			if(!params) {
 				params = {}
 			}
 			return Object.assign(params, merge)
+		}
+
+		public static async overwrapquery(table: string) {
+			const query = await Database.from(table)
+			return query
 		}
 	}
 }

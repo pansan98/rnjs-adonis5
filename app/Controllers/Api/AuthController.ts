@@ -5,6 +5,7 @@ import AuthRegister from 'App/Validators/AuthRegisterValidator'
 import AuthLogin from 'App/Validators/AuthLoginValidator'
 import ProfileValidator from 'App/Validators/ProfileValidator'
 import AuthHelper from 'App/Helpers/Auth'
+import MediaHelper from 'App/Helpers/Media'
 import ValidateWrap from 'App/Helpers/ValidateWrap'
 import UserModel from 'App/Models/User'
 
@@ -71,7 +72,7 @@ export default class AuthController extends BaseController {
 	public async user(ctx: HttpContextContract) {
 		const idf = await ctx.session.get('identify', null)
 		const user = await UserModel.profile(idf)
-		return this.success(ctx, {user: user?.serialize()})
+		return this.success(ctx, {user: user})
 	}
 
 	public async labels(ctx: HttpContextContract) {
@@ -82,7 +83,7 @@ export default class AuthController extends BaseController {
 
 	public async profile(ctx: HttpContextContract) {
 		const idf = await ctx.session.get('identify', null)
-		const user = await UserModel.profile(idf)
+		const user = await UserModel.get(idf)
 		if(user) {
 			try {
 				await ctx.request.validate(ProfileValidator)
@@ -92,7 +93,17 @@ export default class AuthController extends BaseController {
 			}
 
 			const posts = ctx.request.all()
-			console.log(posts)
+			let path
+			if(posts.thumbnail) {
+				if(typeof posts.thumbnail[0] !== 'undefined') {
+					const thumbnail = posts.thumbnail[0]
+					const helper = new MediaHelper()
+					helper.addpath(user.identify_code)
+					const media = await helper.save(thumbnail)
+					posts.thumbnail_id = media.id
+					path = media.path
+				}
+			}
 			let two_authorize = false
 			if(posts.two_authorize.length) {
 				two_authorize = true
@@ -102,10 +113,20 @@ export default class AuthController extends BaseController {
 
 			await user.save()
 			return this.success(ctx, {
-				path: ''
+				path: path
 			})
 		}
 
 		return this.fail(ctx)
+	}
+
+	public async thumbnail_destroy(ctx: HttpContextContract) {
+		const idf = await ctx.session.get('identify', null)
+		const user = await UserModel.profile(idf)
+		if(user?.thumbnail_id) {
+			const helper = new MediaHelper()
+			await helper.destroy(user.thumbnail_id)
+		}
+		return this.success(ctx)
 	}
 }

@@ -37,13 +37,15 @@ class User extends React.Component {
 			console.log(e)
 		})
 	}
-
+	
 	contents() {
 		if(this.props.type === 'side-menu') {
 			return (
 				<div className="user-panel mt-3 pb-3 mb-3 d-flex">
 					<div className="image">
-						<img src={(this.state.user.thumbnail_path) ? this.state.user.thumbnail_path : '/assets/img/no-image.jpg'} className="img-circle elevation-2"/>
+						<img src={(this.state.user.thumbnail_path) ? this.state.user.thumbnail_path : '/assets/img/no-image.jpg'} className="img-circle elevation-2 side-user-profile" style={
+							{height: '40px', width: '40px', objectFit: 'cover'}
+						}/>
 					</div>
 					<div className="info">
 						<Link to={Config.links.profile} className="d-block">{this.state.user.username}</Link>

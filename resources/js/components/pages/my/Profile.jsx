@@ -104,7 +104,7 @@ class Profile extends React.Component {
 					f_email: res.data.user.email,
 					f_profession: res.data.user.profession,
 					f_gender: res.data.user.gender,
-					//f_thumbnail: thumbnails,
+					f_thumbnail: thumbnails,
 					f_two_authorize: (res.data.user.two_authorize_flag) ? [parseInt(res.data.user.two_authorize_flag)] : []
 				})
 			}
@@ -122,7 +122,7 @@ class Profile extends React.Component {
 
 	async save(e) {
 		this.setState({loading: true});
-		await axios.post('/api/auth/profile', {
+		await axios.post(Config.api.auth.profile, {
 			username: this.state.f_name,
 			email: this.state.f_email,
 			profession: this.state.f_profession,
@@ -130,14 +130,12 @@ class Profile extends React.Component {
 			thumbnail: this.state.f_thumbnail,
 			two_authorize: this.state.f_two_authorize,
 			credentials: 'same-origin'
-		}).then((res) => {
+		}).then(async (res) => {
 			if(res.data.result) {
 				this.setState({
 					f_thumbnail: [],
 					user: {
-						thumbnail: {
-							path: res.data.path
-						}
+						thumbnail_path: res.data.path
 					}
 				})
 				window.alert('更新しました。')
@@ -153,7 +151,7 @@ class Profile extends React.Component {
 	}
 
 	async clear(e) {
-		if(this.state.user.thumbnail) {
+		if(this.state.user.thumbnail_path) {
 			this.setState({loading: true});
 			await axios.post('/api/auth/profile/thumbnail/destroy', {
 				credentials: 'same-origin'
@@ -185,7 +183,9 @@ class Profile extends React.Component {
 					<div className="card card-primary card-outline">
 						<div className="card-body box-profile">
 							<div className="text-center">
-								<img src={(this.state.user.thumbnail_path) ? this.state.user.thumbnail_path : '/assets/img/no-image.jpg'} className="profile-user-img img-fluid img-circle"/>
+								<img src={(this.state.user.thumbnail_path) ? this.state.user.thumbnail_path : '/assets/img/no-image.jpg'} className="profile-user-img img-fluid img-circle" style={
+									{height: '100px', objectFit: 'cover'}
+								}/>
 								<div className="offset-sm-1 col-sm-10 mt-2">
 									<button className={`btn btn-danger${clear_disabled}`} onClick={(e) => this.clear(e)}>Clear</button>
 								</div>
@@ -245,7 +245,7 @@ class Profile extends React.Component {
 										formName="f_thumbnail"
 										message="画像をアップロード"
 										values={this.state.f_thumbnail}
-										isHold={false}
+										isHold={true}
 										onChange={(name, value) => this.handlerChange(name, value)}
 									/>
 									<Error error={this.state.errors.thumbnail}/>

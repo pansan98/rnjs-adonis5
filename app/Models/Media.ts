@@ -1,9 +1,12 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, hasOne, HasOne } from '@ioc:Adonis/Lucid/Orm'
-import MediaGroup from 'App/Models/MediaGroup'
+import { compose } from '@ioc:Adonis/Core/Helpers'
+import Common from 'App/Models/Traits/Common'
 
-export default class Media extends BaseModel {
+export default class Media extends compose(BaseModel, Common) {
 	public static table = 'medias'
+
+	public static fillable = ['mime', 'type', 'ext', 'size', 'path', 'name', 'identify_code', 'media_group_id']
 
 	@column({ isPrimary: true })
 	public id: number
@@ -29,11 +32,8 @@ export default class Media extends BaseModel {
 	@column()
 	public identify_code: string
 
-	@hasOne(() => MediaGroup, {
-		localKey: 'media_group_id',
-		foreignKey: 'id'
-	})
-	public media_group: HasOne<typeof MediaGroup>
+	@column()
+	public media_group_id: number|null
 
 	@column.dateTime({ autoCreate: true })
 	public createdAt: DateTime

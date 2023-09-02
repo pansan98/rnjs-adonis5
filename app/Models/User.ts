@@ -1,11 +1,11 @@
 import { DateTime } from 'luxon'
+import Database from '@ioc:Adonis/Lucid/Database'
 import { BaseModel, column, hasOne, HasOne } from '@ioc:Adonis/Lucid/Orm'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import Hash from '@ioc:Adonis/Core/Hash'
 import String from 'App/Helpers/String'
 import Common from 'App/Models/Traits/Common'
-import Media from 'App/Models/Media'
-import SharingLogin from 'App/Models/SharingLogin'
+import MediaModel from 'App/Models/Media'
 
 export default class User extends compose(BaseModel, Common) {
 	public static table = 'users'
@@ -46,17 +46,11 @@ export default class User extends compose(BaseModel, Common) {
 	@column({ serializeAs: null })
 	public social_uniq: string | null
 
-	@hasOne(() => Media, {
-		localKey: 'thumbnail_id',
-		foreignKey: 'id'
-	})
-	public thumbnail: HasOne<typeof Media>
+	@column({ serializeAs: null })
+	public thumbnail_id: number|null
 
-	@hasOne(() => SharingLogin, {
-		localKey: 'active_sharing_id',
-		foreignKey: 'id'
-	})
-	public active_sharing: HasOne<typeof SharingLogin>
+	@column({ serializeAs: null })
+	public active_sharing_id: number|null
 
 	@column()
 	public two_authorize_flag: boolean
@@ -100,10 +94,25 @@ export default class User extends compose(BaseModel, Common) {
 	}
 
 	public static async profile(idf: string) {
-		return await User.query()
-			.select('users.*', 'medias.path AS thumbnail_path')
-			.leftJoin('medias', 'users.thumbnail_id', '=', 'medias.id')
+		return await Database.from(User.table)
+			.select(
+				'users.username',
+				'users.profession',
+				'users.gender',
+				'users.two_authorize_flag',
+				'users.active_flag',
+				'users.thumbnail_id',
+				MediaModel.table+'.path AS thumbnail_path'
+			)
+			.leftJoin(MediaModel.table, 'users.thumbnail_id', '=', MediaModel.table+'.id')
 			.where('users.identify_code', idf)
+			.where('users.delete_flag', 0)
+			.first()
+	}
+
+	public static async get(idf: string) {
+		return await User.query()
+			.where('identify_code', idf)
 			.where('users.delete_flag', 0)
 			.first()
 	}

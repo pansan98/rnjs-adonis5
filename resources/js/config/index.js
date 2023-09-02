@@ -25,7 +25,8 @@ const Config = {
 			logout: '/api/auth/logout',
 			user: ' /api/auth/user',
 			userlabels: '/api/auth/user/labels',
-			sharinguse: '/api/auth/sharing/use'
+			sharinguse: '/api/auth/sharing/use',
+			profile: '/api/auth/profile'
 		}
 	},
 	link: (name) => {
