@@ -51,7 +51,6 @@ class Register extends React.Component {
 			email: this.state.email,
 			credentials: 'same-origin'
 		}).then((res) => {
-			console.log(res)
 			if(res.data.result) {
 				this.setState({registered: true})
 			}
@@ -132,7 +131,7 @@ class Register extends React.Component {
 						<button type="submit" className="btn btn-primary btn-block" onClick={(e) => this.onSave(e)}>Register</button>
 					</div>
 					<p className="mb-0">
-						<Link to={Config.link.auth.login} className="text-center">Login</Link>
+						<Link to={Config.links.auth.login} className="text-center">Login</Link>
 					</p>
 				</div>
 			)

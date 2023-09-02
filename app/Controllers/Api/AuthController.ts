@@ -35,7 +35,7 @@ export default class AuthController extends BaseController {
 
 	public async logout(ctx: HttpContextContract) {
 		const idf = await ctx.session.get('identify', null)
-		const user = await UserModel.profile(idf)
+		const user = await UserModel.get(idf)
 		if(user) {
 			user.merge({
 				active_flag: 0
