@@ -2,6 +2,9 @@ import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import Common from 'App/Models/Traits/Common'
+import Database from '@ioc:Adonis/Lucid/Database'
+import UserModel from 'App/Models/User'
+import MediaModel from 'App/Models/Media'
 
 export default class Follow extends compose(BaseModel, Common) {
 	public static table = 'follows'
@@ -45,5 +48,17 @@ export default class Follow extends compose(BaseModel, Common) {
 		if(followed) {
 			await followed.delete()
 		}
+	}
+
+	public static async myfollows(myid: number) {
+		return await Database.from(Follow.table)
+			.select(UserModel.table+'.*')
+			.select(MediaModel.table+'.path AS thumbnail_path')
+			.join(UserModel.table, UserModel.table+'.id', '=', Follow.table+'.followed_id')
+			.leftJoin(MediaModel.table, MediaModel.table+'.id', '=', UserModel.table+'.thumbnail_id')
+			.where(Follow.table+'.user_id', myid)
+			.where(UserModel.table+'.id', '!=', myid)
+			.where(UserModel.table+'.delete_flag', 0)
+			.exec()
 	}
 }

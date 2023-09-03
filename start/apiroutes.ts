@@ -18,4 +18,5 @@ Route.group(() => {
         .where('idf', /^[a-zA-Z0-9]$/)
     Route.post('/remove/:idf', 'FollowsController.remove')
         .where('idf', /^[a-zA-Z0-9]$/)
-}).prefix('/api/follow').namespace('App/Controller/Api')
+    Route.get('/list', 'FollowsController.list')
+}).prefix('/api/follow').namespace('App/Controllers/Api')

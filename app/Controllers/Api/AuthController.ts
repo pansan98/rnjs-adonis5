@@ -82,8 +82,7 @@ export default class AuthController extends BaseController {
 	}
 
 	public async profile(ctx: HttpContextContract) {
-		const idf = await ctx.session.get('identify', null)
-		const user = await UserModel.get(idf)
+		const user = await this.ud(ctx)
 		if(user) {
 			try {
 				await ctx.request.validate(ProfileValidator)

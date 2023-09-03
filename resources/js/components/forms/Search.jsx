@@ -12,13 +12,13 @@ class Search extends React.Component {
 					<input
 						className="form-control"
 						type="text"
-						placeholder="商品名を入力してください。"
+						placeholder={this.props.placeholder}
 						value={this.props.value}
 						onChange={(e) => this.props.onChange(this.props.formName, e.currentTarget.value)}
 					/>
 					<div className="input-group-append">
 						<button className="btn btn-default" onClick={(e) => this.props.onSearch(e)}>
-							検索
+							{this.props.label}
 						</button>
 					</div>
 				</div>
@@ -29,7 +29,9 @@ class Search extends React.Component {
 
 Search.defaultProps = {
 	value: '',
-	formName: 'search'
+	formName: 'search',
+	placeholder: '商品名を入力してください。',
+	label: '検索'
 }
 
 export default Search

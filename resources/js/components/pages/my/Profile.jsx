@@ -183,7 +183,7 @@ class Profile extends React.Component {
 					<div className="card card-primary card-outline">
 						<div className="card-body box-profile">
 							<div className="text-center">
-								<img src={(this.state.user.thumbnail_path) ? this.state.user.thumbnail_path : '/assets/img/no-image.jpg'} className="profile-user-img img-fluid img-circle" style={
+								<img src={(this.state.user.thumbnail_path) ? this.state.user.thumbnail_path : Config.noimage} className="profile-user-img img-fluid img-circle" style={
 									{height: '100px', objectFit: 'cover'}
 								}/>
 								<div className="offset-sm-1 col-sm-10 mt-2">

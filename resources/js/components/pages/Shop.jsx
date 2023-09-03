@@ -39,9 +39,9 @@ class Shop extends React.Component {
 	}
 
 	handlerSearch(name, value) {
-		const param = {};
-		param[name] = value;
-		this.setState(param);
+		const param = {}
+		param[name] = value
+		this.setState(param)
 	}
 
 	async destroy(e, identify) {

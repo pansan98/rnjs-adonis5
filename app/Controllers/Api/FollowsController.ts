@@ -6,8 +6,7 @@ import FollowModel from 'App/Models/Follow'
 
 export default class FollowsController extends BaseController {
 	public async add(ctx: HttpContextContract) {
-		const idf = await ctx.session.get('identify', null)
-		const user = await UserModel.get(idf)
+		const user = await this.ud(ctx)
 		if(!user) return this.fail(ctx, {errors: {
 			system: ['フォローするためにはログインしてください。']
 		}})
@@ -22,8 +21,7 @@ export default class FollowsController extends BaseController {
 	}
 
 	public async remove(ctx: HttpContextContract) {
-		const idf = await ctx.session.get('identify', null)
-		const user = await UserModel.get(idf)
+		const user = await this.ud(ctx)
 		if(!user) return this.fail(ctx, {errors: {
 			system: ['フォローを外すためにはログインしてください。']
 		}})
@@ -35,5 +33,16 @@ export default class FollowsController extends BaseController {
 		}})
 		await FollowModel.remove(user.id, followed_user.id)
 		return this.success(ctx)
+	}
+
+	public async list(ctx: HttpContextContract) {
+		const user = await this.ud(ctx)
+		if(!user) return this.fail(ctx, {errors: {
+			sysmte: ['ログインしてください。']
+		}})
+		
+		// フォロー済みユーザーを取得
+		const follows = await FollowModel.myfollows(user.id)
+		return this.success(ctx, {follows: follows})
 	}
 }

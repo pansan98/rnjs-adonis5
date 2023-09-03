@@ -38,8 +38,10 @@ const Config = {
 			userlabels: '/api/auth/user/labels',
 			sharinguse: '/api/auth/sharing/use',
 			profile: '/api/auth/profile'
-		}
+		},
+		follow: '/api/follow/list'
 	},
+	noimage: '/assets/img/no-image.jpg',
 	link: (name) => {
 		
 	}
