@@ -38,11 +38,25 @@ export default class FollowsController extends BaseController {
 	public async list(ctx: HttpContextContract) {
 		const user = await this.ud(ctx)
 		if(!user) return this.fail(ctx, {errors: {
-			sysmte: ['ログインしてください。']
+			system: ['ログインしてください。']
 		}})
 		
 		// フォロー済みユーザーを取得
 		const follows = await FollowModel.myfollows(user.id)
 		return this.success(ctx, {follows: follows})
+	}
+
+	public async search(ctx: HttpContextContract) {
+		const user = await this.ud(ctx)
+		if(!user) return this.fail(ctx, {errors: {
+			system: ['ログインしてください。']
+		}})
+
+		const word = await ctx.request.qs()?.word
+		if(word) {
+			const users = await UserModel.username_search(user.id, user.identify_code, word)
+			return this.success(ctx, {list: users})
+		}
+		return this.success(ctx, {list: []})
 	}
 }

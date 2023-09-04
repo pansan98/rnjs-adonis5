@@ -7,7 +7,7 @@ class Search extends React.Component {
 
 	render() {
 		return (
-			<div className="col-10">
+			<div className={this.props.wrapping_class}>
 				<div className="input-group">
 					<input
 						className="form-control"
@@ -31,7 +31,8 @@ Search.defaultProps = {
 	value: '',
 	formName: 'search',
 	placeholder: '商品名を入力してください。',
-	label: '検索'
+	label: '検索',
+	wrapping_class: 'col-10'
 }
 
 export default Search

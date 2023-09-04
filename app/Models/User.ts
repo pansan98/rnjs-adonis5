@@ -6,6 +6,7 @@ import Hash from '@ioc:Adonis/Core/Hash'
 import String from 'App/Helpers/String'
 import Common from 'App/Models/Traits/Common'
 import MediaModel from 'App/Models/Media'
+import FollowModel from 'App/Models/Follow'
 
 export default class User extends compose(BaseModel, Common) {
 	public static table = 'users'
@@ -126,5 +127,26 @@ export default class User extends compose(BaseModel, Common) {
 		}
 
 		return labels
+	}
+
+	public static async username_search(myid: number, idf:string, word: string) {
+		return await Database.from(User.table)
+			.select(
+				User.table+'.username',
+				User.table+'.identify_code',
+				User.table+'.active_flag',
+				MediaModel.table+'.path AS thumbnail_path'
+			)
+			.leftJoin(MediaModel.table, User.table+'.thumbnail_id', '=', MediaModel.table+'.id')
+			.where(User.table+'.identify_code', '!=', idf)
+			.where(User.table+'.delete_flag', 0)
+			.whereILike(User.table+'.username', '%'+word+'%')
+			.whereNotIn(User.table+'.id', (query) => {
+				query.from(FollowModel.table)
+					.select('followed_id')
+					.where('user_id', myid)
+			})
+			.orderBy(User.table+'.created_at', 'asc')
+			.exec()
 	}
 }

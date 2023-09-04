@@ -39,7 +39,12 @@ const Config = {
 			sharinguse: '/api/auth/sharing/use',
 			profile: '/api/auth/profile'
 		},
-		follow: '/api/follow/list'
+		follow: {
+			list: '/api/follow/list',
+			search: '/api/follow/search',
+			add: '/api/follow/add',
+			remove: '/api/follow/remove'
+		}
 	},
 	noimage: '/assets/img/no-image.jpg',
 	link: (name) => {
