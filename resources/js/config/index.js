@@ -43,7 +43,8 @@ const Config = {
 			list: '/api/follow/list',
 			search: '/api/follow/search',
 			add: '/api/follow/add',
-			remove: '/api/follow/remove'
+			remove: '/api/follow/remove',
+			conf: '/api/follow/conf'
 		}
 	},
 	noimage: '/assets/img/no-image.jpg',

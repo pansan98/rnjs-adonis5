@@ -29,6 +29,7 @@ class Follows extends React.Component {
 
 		this.state = {
 			follows: [],
+			unfollows: [],
 			fetched: false,
 			loading: false,
 			usersearch: '',
@@ -55,19 +56,20 @@ class Follows extends React.Component {
 	}
 
 	async fetch() {
-		const follows = await axios.get(Config.api.follow.list, {
+		const [follows, unfollows] = await axios.get(Config.api.follow.list, {
 			credentials: 'same-origin'
 		}).then((res) => {
 			if(res.data.result) {
-				return res.data.follows
+				return [res.data.follows, res.data.unfollows]
 			}
-			return []
+			return [[], []]
 		}).catch((e) => {
 			console.log(e)
 		})
 
 		this.setState({
 			follows: follows,
+			unfollows: unfollows,
 			fetched: true
 		})
 	}
@@ -122,7 +124,7 @@ class Follows extends React.Component {
 							<div
 							key={`${sf.identify_code}_search`}
 							>
-								<div className="col-12 d-flex">
+								<div className="col-12 mb-2 p-2 border border-primary d-flex">
 									<div className="col-8">
 										<img
 										src={(sf.thumbnail_path) ? sf.thumbnail_path : Config.noimage}
@@ -133,7 +135,7 @@ class Follows extends React.Component {
 										/>
 										<p className="d-inline-flex ml-2">{sf.username}</p>
 									</div>
-									<div className="col-4 ml-auto">
+									<div className="col-4 ml-auto d-inline-flex justify-content-end align-items-center">
 										<button
 										className="btn btn-default"
 										onClick={(e) => this.followAdd(sf.identify_code)}
@@ -244,6 +246,52 @@ class Follows extends React.Component {
 		}
 	}
 
+	unfollowdisplay() {
+		if(this.state.fetched && !this.state.unfollows.length) {
+			return (<div></div>)
+		} else if(!this.state.fetched) {
+			return (<div></div>)
+		} else {
+			return (
+				<div className="card card-list">
+					<div className="card-header">
+						あなたをフォローしているユーザーです。
+					</div>
+					<div className="card-body">
+						{this.state.unfollows.map((unfollow) => {
+							return (
+								<div
+								key={`${unfollow.identify_code}_unfowllow`}
+								>
+									<div className="col-12 mb-2 p-2 border border-primary d-flex">
+										<div className="col-8">
+											<img
+											src={(unfollow.thumbnail_path) ? unfollow.thumbnail_path : Config.noimage}
+											className="profile-user-img img-fluid img-circle"
+											style={{
+												height: '60px', width: '60px', objectFit: 'cover'
+											}}
+											/>
+											<p className="d-inline-flex ml-2">{unfollow.username}</p>
+										</div>
+										<div className="col-4 ml-auto d-inline-flex justify-content-end align-items-center">
+											<button
+											className="btn btn-default"
+											onClick={(e) => this.followAdd(unfollow.identify_code)}
+											>
+												<i className="fas fa-user-plus"></i>
+											</button>
+										</div>
+									</div>
+								</div>
+							)
+						})}
+					</div>
+				</div>
+			)
+		}
+	}
+
 	contents() {
 		return (
 			<div>
@@ -258,12 +306,13 @@ class Follows extends React.Component {
 								className="btn btn-default"
 								onClick={(e) => this.viewModal(e)}
 								>
-									<i className="fas fa-user-plus"></i>
+									<i className="fas fa-search"></i>
 								</button>
 							</div>
 						</div>
 					</div>
 				</div>
+				{this.unfollowdisplay()}
 				<div className="card card-list">
 					<div className="card-body">
 						{this.display()}

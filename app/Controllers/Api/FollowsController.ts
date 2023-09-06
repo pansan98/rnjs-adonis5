@@ -43,7 +43,8 @@ export default class FollowsController extends BaseController {
 		
 		// フォロー済みユーザーを取得
 		const follows = await FollowModel.myfollows(user.id)
-		return this.success(ctx, {follows: follows})
+		const unfollows = await FollowModel.unmyfollows(user.id)
+		return this.success(ctx, {follows: follows, unfollows: unfollows})
 	}
 
 	public async search(ctx: HttpContextContract) {
@@ -58,5 +59,18 @@ export default class FollowsController extends BaseController {
 			return this.success(ctx, {list: users})
 		}
 		return this.success(ctx, {list: []})
+	}
+
+	public async conf(ctx: HttpContextContract) {
+		const user = await this.ud(ctx)
+		if(!user) return this.notLogged(ctx)
+
+		const unfollow_count = await FollowModel.countunfollower(user.id)
+
+		return this.success(ctx, {
+			fetches: {
+				follow_conf: unfollow_count
+			}
+		})
 	}
 }

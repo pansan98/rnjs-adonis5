@@ -20,4 +20,6 @@ Route.group(() => {
 		//.where('idf', /^[a-zA-Z0-9]$/)
 	Route.get('/list', 'FollowsController.list')
 	Route.get('/search', 'FollowsController.search')
+	// 相手側からのフォロー数
+	Route.get('/conf', 'FollowsController.conf')
 }).prefix('/api/follow').namespace('App/Controllers/Api')

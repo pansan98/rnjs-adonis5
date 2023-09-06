@@ -8,8 +8,25 @@ class GlobalNav extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			loading: false
+			loading: false,
+			fetches: {}
 		}
+	}
+
+	componentDidMount() {
+		this.fetch()
+	}
+
+	async fetch() {
+		axios.get(Config.api.follow.conf, {
+			credentials: 'same-origin'
+		}).then((res) => {
+			if(res.data.result) {
+				this.setState({fetches: res.data.fetches})
+			}
+		}).catch((e) => {
+			console.log(e)
+		})
 	}
 
 	async onLogout(e) {
@@ -24,6 +41,29 @@ class GlobalNav extends React.Component {
 			console.log(e)
 			this.setState({loading: false})
 		})
+	}
+
+	viewFollowConf() {
+		if(this.state.fetches.follow_conf > 0) {
+			return (
+				<span
+				className="un-follower-count"
+				style={{
+					position: 'absolute',
+					width: '25px',
+					height: '25px',
+					top: '-8px',
+					right: '-5px',
+					borderRadius: '50%',
+					backgroundColor: '#ff0000',
+					color: '#ffffff'
+				}}
+				>
+					{this.state.fetches.follow_conf}
+				</span>
+			)
+		}
+		return (<span></span>)
 	}
 
 	render() {
@@ -47,6 +87,7 @@ class GlobalNav extends React.Component {
 					<li className="nav-item mr-1">
 						<Link to={Config.links.follow} className="nav-link btn btn-default">
 							<i className="fas fa-users"></i>
+							{this.viewFollowConf()}
 						</Link>
 					</li>
 					<li className="nav-item">

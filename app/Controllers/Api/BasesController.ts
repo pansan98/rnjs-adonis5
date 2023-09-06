@@ -3,11 +3,11 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import UserModel from 'App/Models/User'
 
 export default class BasesController {
-	public async success(ctx: HttpContextContract, params?: {}) {
+	protected async success(ctx: HttpContextContract, params?: {}) {
 		ctx.response.status(200).json(Object.assign({result: true}, params))
 	}
 
-	public async fail(ctx: HttpContextContract, params?: {}) {
+	protected async fail(ctx: HttpContextContract, params?: {}) {
 		ctx.response.status(400).json(Object.assign({result: false}, params))
 	}
 	
@@ -18,5 +18,11 @@ export default class BasesController {
 			return await UserModel.get(idf)
 		}
 		return null
+	}
+
+	protected async notLogged(ctx: HttpContextContract) {
+		return this.fail(ctx, {errors: {
+			system: ['ログインしてください。']
+		}})
 	}
 }
