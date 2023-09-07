@@ -68,11 +68,28 @@ export default class Follow extends compose(BaseModel, Common) {
 			.select(MediaModel.table+'.path AS thumbnail_path')
 			.join(UserModel.table, UserModel.table+'.id', '=', Follow.table+'.user_id')
 			.leftJoin(MediaModel.table, MediaModel.table+'.id', '=', UserModel.table+'.thumbnail_id')
-			.where('followed_id', myid)
+			.whereIn(Follow.table+'.id', (query) => {
+				query.from(Follow.table)
+					.select(Follow.table+'.id')
+					.where(Follow.table+'.followed_id', myid)
+			})
 			.whereNotIn(Follow.table+'.id', (query) => {
 				query.from(Follow.table)
 					.select(Follow.table+'.id')
-					.where(Follow.table+'.user_id', myid)
+					.whereIn(Follow.table+'.followed_id', (query) => {
+						query.from(Follow.table)
+							.select(Follow.table+'.user_id')
+							.where(Follow.table+'.followed_id', myid)
+					})
+			})
+			.whereNotIn(Follow.table+'.id', (query) => {
+				query.from(Follow.table)
+					.select(Follow.table+'.id')
+					.whereIn(Follow.table+'.user_id', (query) => {
+						query.from(Follow.table)
+							.select(Follow.table+'.followed_id')
+							.where(Follow.table+'.user_id', myid)
+					})
 			})
 			.exec()
 	}
@@ -80,10 +97,23 @@ export default class Follow extends compose(BaseModel, Common) {
 	public static async countunfollower(myid: number) {
 		const result = await Follow.query()
 			.count('id AS un_count')
-			.where('followed_id', myid)
+			.whereIn('id', (query) => {
+				query.select('id')
+					.where('followed_id', myid)
+			})
 			.whereNotIn('id', (query) => {
 				query.select('id')
-					.where('user_id', myid)
+					.whereIn('followed_id', (query) => {
+						query.select('user_id')
+							.where('followed_id', myid)
+					})
+			})
+			.whereNotIn('id', (query) => {
+				query.select('id')
+					.whereIn('user_id', (query) => {
+						query.select('followed_id')
+							.where('user_id', myid)
+					})
 			})
 			.exec()
 		return BigInt(result[0].$extras.un_count)
