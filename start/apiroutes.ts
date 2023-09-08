@@ -23,3 +23,9 @@ Route.group(() => {
 	// 相手側からのフォロー数
 	Route.get('/conf', 'FollowsController.conf')
 }).prefix('/api/follow').namespace('App/Controllers/Api')
+
+Route.group(() => {
+	Route.post('/confirm', 'ContactController.confirm')
+	Route.post('/send', 'ContactController.send')
+	Route.post('/back', 'ContactController.back')
+}).prefix('/api/contact').namespace('App/Controllers/Api')

@@ -31,7 +31,8 @@ class Profile extends React.Component {
 				name: [],
 				email: [],
 				thumbnail: [],
-				two_authorize: []
+				two_authorize: [],
+				system: []
 			},
 			forms: {
 				gender: []
@@ -144,7 +145,6 @@ class Profile extends React.Component {
 			if(e.response.status === 400) {
 				this.setState({errors: e.response.data.errors})
 			}
-			console.log(e)
 		}).finally(() => {
 			this.setState({loading: false})
 		})

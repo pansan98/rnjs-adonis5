@@ -45,6 +45,11 @@ const Config = {
 			add: '/api/follow/add',
 			remove: '/api/follow/remove',
 			conf: '/api/follow/conf'
+		},
+		contact: {
+			confirm: '/api/contact/confirm',
+			send: '/api/contact/send',
+			back: '/api/contact/back'
 		}
 	},
 	noimage: '/assets/img/no-image.jpg',

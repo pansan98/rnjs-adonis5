@@ -63,8 +63,6 @@ class Follows extends React.Component {
 				return [res.data.follows, res.data.unfollows]
 			}
 			return [[], []]
-		}).catch((e) => {
-			console.log(e)
 		})
 
 		this.setState({
@@ -86,8 +84,6 @@ class Follows extends React.Component {
 			if(res.data.result) {
 				this.setState({searchfollowlist: res.data.list})
 			}
-		}).catch((e) => {
-			console.log(e)
 		})
 		this.setState({loading: false})
 	}
@@ -229,6 +225,9 @@ class Follows extends React.Component {
 									</div>
 									<div className="card-footer">
 										<div className="d-flex">
+											<button className="btn btn-primary">
+												<i className="fas fa-comment-dots"></i>
+											</button>
 											<button
 											className="btn btn-default ml-auto"
 											onClick={(e) => this.followRemove(follow.identify_code)}

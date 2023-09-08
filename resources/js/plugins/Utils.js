@@ -69,6 +69,14 @@ class Utils {
 	errorHandler(e) {
 		throw new Error(e.message)
 	}
+
+	static async wait(sec) {
+		return new Promise((resolve) => {
+			setTimeout(() => {
+				resolve()
+			}, sec)
+		})
+	}
 }
 
 export default Utils
