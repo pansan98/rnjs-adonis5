@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import Database from '@ioc:Adonis/Lucid/Database'
-import { BaseModel, column, hasOne, HasOne } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import Hash from '@ioc:Adonis/Core/Hash'
 import String from 'App/Helpers/String'
@@ -86,8 +86,8 @@ export default class User extends compose(BaseModel, Common) {
 		password: string,
 		email: string|null
 	}) {
-		params = User.assign(params, {identify_code: String.random(20)})
-		return await User.create(User.filter(params, User.fillable))
+		const inputs = User.assign(params, {identify_code: String.random(20)})
+		return await User.create(User.filter(inputs, User.fillable))
 	}
 
 	public static async verify(ipw: string, user: User) {

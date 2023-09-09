@@ -13,7 +13,6 @@
 */
 
 import Env from '@ioc:Adonis/Core/Env'
-import path from 'path'
 
 export default Env.rules({
 	HOST: Env.schema.string({ format: 'host' }),

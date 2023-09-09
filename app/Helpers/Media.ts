@@ -1,7 +1,7 @@
 import fs from 'fs'
 
 import mediaConfig from 'Config/media'
-import {MediaContract, MediaArrayContract} from 'contracts/media'
+import {MediaContract} from 'contracts/media'
 import MediaModel from 'App/Models/Media'
 import MediaGroupModel from 'App/Models/MediaGroup'
 
@@ -32,9 +32,9 @@ export default class Media {
 		return media
 	}
 
-	public async multiple_save(thumbnails: MediaArrayContract, media_group_id: number|null) {
+	// public async multiple_save(thumbnails: MediaArrayContract, media_group_id: number|null) {
 
-	}
+	// }
 
 	protected extension(f_name: string) {
 		const extensions = f_name.split('.')

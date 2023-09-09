@@ -9,7 +9,7 @@ const Common = <T extends NormalizeConstructor<typeof BaseModel>>(
 	return class extends CommonTrait {
 		public static filter(params: {}, fillables: string[]) {
 			if(typeof params === 'object') {
-				const nots = []
+				const nots: string[] = []
 				for(let k in params) {
 					if(!fillables.includes(k)) {
 						nots.push(k)

@@ -24,18 +24,18 @@ validator.rule('dbexists', async (value, [table, column], options) => {
 	}
 })
 
-validator.rule('thumbnail', async (value: [{
-	identify_code: string
-}], args, options) => {
-	if(!value) return
+// validator.rule('thumbnail', async (value: [{
+// 	identify_code: string
+// }], args, options) => {
+// 	if(!value) return
 
-	const thumbnail = value[0]
-	if(false) {
-		options.errorReporter.report(
-			options.pointer,
-			'thumbnail',
-			'識別できないファイルです。',
-			options.arrayExpressionPointer
-		)
-	}
-})
+// 	const thumbnail = value[0]
+// 	if(false) {
+// 		options.errorReporter.report(
+// 			options.pointer,
+// 			'thumbnail',
+// 			'識別できないファイルです。',
+// 			options.arrayExpressionPointer
+// 		)
+// 	}
+// })
