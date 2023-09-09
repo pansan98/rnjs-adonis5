@@ -1,4 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Mail from '@ioc:Adonis/Addons/Mail'
+import Env from '@ioc:Adonis/Core/Env'
 import BaseController from './BasesController'
 
 import Encryption from '@ioc:Adonis/Core/Encryption'
@@ -6,6 +8,8 @@ import Encryption from '@ioc:Adonis/Core/Encryption'
 import ContactValidator from 'App/Validators/ContactValidator'
 import ValidateWrap from 'App/Helpers/ValidateWrap'
 import StringHelper from 'App/Helpers/String'
+
+import MailModel from 'App/Models/Mail'
 
 export default class ContactController extends BaseController {
 	protected token_prefix = 'csrf_contact_'
@@ -79,6 +83,49 @@ export default class ContactController extends BaseController {
 				},
 				forbidden: true
 			})
+		}
+
+		const email = await ctx.request.input('email')
+		const subject = await ctx.request.input('subject')
+		const message = await ctx.request.input('message')
+		const clientview = ctx.view.renderSync('emails/contact', {
+			username: user.username,
+			email: email,
+			subject: subject,
+			message: message
+		})
+
+		const client = await Mail.send((msg) => {
+			msg.from(Env.get('REPRY_TO'))
+				.to(email)
+				.subject('お問い合わせありがとうございます。')
+				.text(clientview)
+		})
+		if(!client.rejected.length) {
+			await MailModel.log('contact', email, clientview, {
+				messageTime: client.messageTime,
+				messageSize: client.messageSize,
+				messageId: client.messageId
+			})
+			const adminview = ctx.view.renderSync('emails/admin_contact', {
+				username: user.username,
+				email: email,
+				subject: subject,
+				message: message
+			})
+			const admin = await Mail.send((msg) => {
+				msg.from(Env.get('REPRY_TO'))
+					.to(Env.get('ADMIN_TO'))
+					.subject('お問い合わせがありました。')
+					.text(adminview)
+			})
+			if(!admin.rejected.length) {
+				await MailModel.log('contact', Env.get('ADMIN_TO'), adminview, {
+					messageTime: admin.messageTime,
+					messageSize: admin.messageSize,
+					messageId: admin.messageId
+				})
+			}
 		}
 
 		return this.success(ctx)

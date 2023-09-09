@@ -225,8 +225,10 @@ class Contact extends React.Component {
 								メールアドレス：{this.state.inputs.email}
 							</div>
 							<div className="col-12 mb-2 p-2">
-								お問い合わせ内容=================<br/>
+								お問い合わせ内容=================
+								<br/><br/>
 								{Reactnl2br(this.state.inputs.message)}
+								<br/><br/>
 								==============================
 							</div>
 						</div>
