@@ -1,6 +1,7 @@
 import React from 'react'
 import {createRoot} from 'react-dom/client'
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
+import axios from 'axios'
 import Config from '../config'
 
 // Pages
@@ -34,6 +35,19 @@ import Password from './auth/ParamsPassword'
 class App extends React.Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			user: {}
+		}
+	}
+
+	componentDidMount() {
+		axios.get(Config.api.auth.user, {
+			credentials: 'same-origin'
+		}).then((res) => {
+			if(res.data.result) {
+				this.setState({user: res.data.user})
+			}
+		})
 	}
 
 	render() {
@@ -57,7 +71,7 @@ class App extends React.Component {
 						<Route path="/event/create" element={<EventEdit />} />
 						<Route path="/event/category" element={<EventCategory />} />
 						<Route path={Config.links.profile} element={<MyProfile />} />
-						<Route path={Config.links.follow} element={<MyFollows />} />
+						<Route path={Config.links.follow} element={<MyFollows user={this.state.user} />} />
 						<Route path="/practice/stop-watch" element={<StopWatch />} />
 						<Route path={Config.links.auth.login} element={<Login />} />
 						<Route path={Config.links.auth.register} element={<Register />} />

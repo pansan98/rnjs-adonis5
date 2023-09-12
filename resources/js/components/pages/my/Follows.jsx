@@ -8,6 +8,7 @@ import Modal from '../../plugins/Modal'
 import Base from '../Base'
 
 import Search from '../../forms/Search'
+import Chat from '../../plugins/Chat'
 
 class Follows extends React.Component {
 	constructor(props) {
@@ -24,6 +25,11 @@ class Follows extends React.Component {
 					closefn: () => {},
 					callbackfn: () => {}
 				}
+			},
+			chat: {
+				active: false,
+				room_id: null,
+				closefn: () => {}
 			}
 		}
 
@@ -41,6 +47,11 @@ class Follows extends React.Component {
 				success: this.config.modals.add.success,
 				closefn: () => this.config.modals.add.closefn,
 				callbackfn: () => this.config.modals.add.callbackfn
+			},
+			chat: {
+				active: this.config.chat.active,
+				room_id: this.config.chat.room_id,
+				closefn: () => this.config.chat.closefn
 			}
 		}
 	}
@@ -149,6 +160,31 @@ class Follows extends React.Component {
 		return (<div></div>)
 	}
 
+	async viewChat(user_id) {
+		this.setState({loading: true})
+		await axios.get(Config.api.chat.start+user_id, {
+			credentials: 'same-origin'
+		}).then((res) => {
+			if(res.data.result) {
+				this.setState({
+					chat: {
+						active: true,
+						room_id: res.data.room_id,
+						user: this.props.user,
+						closefn: () => {this.closeChat()}
+					}
+				})
+			}
+		})
+		this.setState({loading: false})
+	}
+
+	closeChat() {
+		this.setState({
+			chat: this.config.chat
+		})
+	}
+
 	viewModal(e) {
 		this.setState({
 			follow_add: Object.assign(this.config.modals.add, {
@@ -225,7 +261,10 @@ class Follows extends React.Component {
 									</div>
 									<div className="card-footer">
 										<div className="d-flex">
-											<button className="btn btn-primary">
+											<button
+											className="btn btn-primary"
+											onClick={(e) => this.viewChat(follow.user_id)}
+											>
 												<i className="fas fa-comment-dots"></i>
 											</button>
 											<button
@@ -328,6 +367,13 @@ class Follows extends React.Component {
 				>
 					{this.modalFollowList()}
 				</Modal>
+
+				<Chat
+				active={this.state.chat.active}
+				room_id={this.state.chat.room_id}
+				user={this.state.chat.user}
+				closefn={this.state.chat.closefn}
+				/>
 			</div>
 		)
 	}
@@ -337,6 +383,10 @@ class Follows extends React.Component {
 			<Base title="Follows" content={this.contents()} />
 		)
 	}
+}
+
+Follows.defaultProps = {
+	user: {}
 }
 
 export default Follows

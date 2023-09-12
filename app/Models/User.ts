@@ -97,6 +97,7 @@ export default class User extends compose(BaseModel, Common) {
 	public static async profile(idf: string) {
 		return await Database.from(User.table)
 			.select(
+				'users.id AS user_id',
 				'users.username',
 				'users.profession',
 				'users.gender',

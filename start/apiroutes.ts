@@ -29,3 +29,7 @@ Route.group(() => {
 	Route.post('/send', 'ContactController.send')
 	Route.post('/back', 'ContactController.back')
 }).prefix('/api/contact').namespace('App/Controllers/Api')
+
+Route.group(() => {
+	Route.get('/start/:user_id', 'ChatsController.start')
+}).prefix('/api/chat').namespace('App/Controllers/Api')

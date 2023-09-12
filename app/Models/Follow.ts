@@ -52,7 +52,7 @@ export default class Follow extends compose(BaseModel, Common) {
 
 	public static async myfollows(myid: number) {
 		return await Database.from(Follow.table)
-			.select(UserModel.table+'.username', UserModel.table+'.identify_code')
+			.select(UserModel.table+'.username', UserModel.table+'.identify_code', UserModel.table+'.id AS user_id')
 			.select(MediaModel.table+'.path AS thumbnail_path')
 			.join(UserModel.table, UserModel.table+'.id', '=', Follow.table+'.followed_id')
 			.leftJoin(MediaModel.table, MediaModel.table+'.id', '=', UserModel.table+'.thumbnail_id')

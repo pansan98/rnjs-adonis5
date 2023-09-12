@@ -19,6 +19,16 @@ class Utils {
 		return formatter.format(number)
 	}
 
+	static random(len) {
+		const str = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-'
+		let s = ''
+		for(let i = 0; i < len; i++) {
+			s += str.charAt(Math.floor(Math.random() * str.length))
+		}
+
+		return s
+	}
+
 	async apiHandler(method, endpoint, params, final) {
 		method = method.toUpperCase()
 		const d_params = {credentials: 'same-origin'}

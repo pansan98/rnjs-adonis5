@@ -50,6 +50,10 @@ const Config = {
 			confirm: '/api/contact/confirm',
 			send: '/api/contact/send',
 			back: '/api/contact/back'
+		},
+		chat: {
+			log: '/api/chat/log/',
+			start: '/api/chat/start/'
 		}
 	},
 	noimage: '/assets/img/no-image.jpg',
