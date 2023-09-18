@@ -14,8 +14,24 @@
 
 		.modal {
 			position: fixed;
-			top: 10%;
+			top: 5%;
 			display: block;
+		}
+		
+		.scrollable {
+			overflow-y: auto;
+		}
+
+		.overflow-hidden {
+			overflow: hidden;
+		}
+
+		.max-height-300 {
+			max-height: 300px;
+		}
+
+		.max-height-350 {
+			max-height: 350px;
 		}
 	}
 }

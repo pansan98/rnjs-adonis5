@@ -1,27 +1,36 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
-export default class UserInRoom extends BaseModel {
-	public static table = 'users_in_rooms'
+export default class Chat extends BaseModel {
+	public static table = 'chats'
+
 	@column({ isPrimary: true })
 	public id: number
 
 	@column()
-	public user_id: number
+	public room_id: number
 
 	@column()
-	public room_id: number
+	public send_user_id: number
+
+	@column()
+	public message: string
+
+	@column()
+	public is_edit: boolean
+
+	@column()
+	public is_cancel: boolean
+
+	@column()
+	public reply_to: number
+
+	@column()
+	public trx_id: string
 
 	@column.dateTime({ autoCreate: true })
 	public createdAt: DateTime
 
 	@column.dateTime({ autoCreate: true, autoUpdate: true })
 	public updatedAt: DateTime
-
-	public static async inUser(myid: number, room_id: number) {
-		return await UserInRoom.query()
-			.where('user_id', myid)
-			.where('room_id', room_id)
-			.first()
-	}
 }

@@ -32,4 +32,6 @@ Route.group(() => {
 
 Route.group(() => {
 	Route.get('/start/:user_id', 'ChatsController.start')
+	Route.post('/read/:user_id', 'ChatsController.read')
+	Route.post('/bulkread/:user_id', 'ChatsController.bulkread')
 }).prefix('/api/chat').namespace('App/Controllers/Api')

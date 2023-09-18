@@ -4,6 +4,7 @@ import axios from 'axios'
 import Reactnl2br from 'react-nl2br'
 
 import Utils from '../../plugins/Utils'
+import Config from '../../config'
 
 import Loader from '../common/Loader'
 import Search from '../forms/Search'
@@ -31,6 +32,8 @@ class Chat extends React.Component {
 				this.socket.on('connect', () => {
 					this.socket.on('chat:log:receive-'+this.props.room_id, (data) => {
 						this.setState({logs: data.logs, chatloading: false})
+						// 未読のものを既読にする
+						this.bulkChatread()
 					})
 					this.socket.emit('chat:log', {
 						room_id: this.props.room_id
@@ -38,6 +41,7 @@ class Chat extends React.Component {
 					//this.fetch()
 					this.socket.on('chat:send:receive-'+this.props.room_id, (data) => {
 						if(parseInt(data.send_user_id) !== parseInt(this.props.user.user_id)) {
+							this.chatread(data.trx_id)
 							const logs = this.state.logs
 							logs.push({
 								send_user_id: data.send_user_id,
@@ -83,6 +87,26 @@ class Chat extends React.Component {
 		this.setState(param)
 	}
 
+	async bulkChatread() {
+		if(this.props.unreads.length) {
+			Promise.all(this.props.unreads.map((view_id) => {
+				return new Promise((resolve) => {
+					axios.post(Config.api.chat.bulkread+this.props.user.user_id, {
+						view_id: view_id,
+						credentials: 'same-origin'
+					}).then(resolve)
+				})
+			}))
+		}
+	}
+
+	async chatread(trx_id) {
+		axios.post(Config.api.chat.read+this.props.user.user_id, {
+			trx_id: trx_id,
+			credentials: 'same-origin'
+		})
+	}
+
 	async fetch() {
 		await axios.get(Config.api.chat.log+this.props.room_id, {
 			credentials: 'same-origin'
@@ -124,9 +148,9 @@ class Chat extends React.Component {
 	display() {
 		if(this.state.logs.length) {
 			return (
-				<div>
+				<div className="scrollable max-height-300">
 					<Loader is_loading={this.state.chatloading}/>
-					<div className="col-12 scrollable">
+					<div className="col-12">
 						{this.state.logs.map((log) => {
 							return (
 								<div key={`${log.trx_id}-log`}>
@@ -188,7 +212,7 @@ class Chat extends React.Component {
 							<div className={`modal-dialog`}>
 								<div className="modal-content">
 									{this.header()}
-									<div className="modal-body">
+									<div className="modal-body overflow-hidden max-height-350">
 										{this.display()}
 									</div>
 									{this.footer()}
@@ -206,6 +230,7 @@ class Chat extends React.Component {
 Chat.defaultProps = {
 	active: false,
 	room_id: null,
+	unreads: [],
 	user: {},
 	close: true,
 	closefn: () => {}

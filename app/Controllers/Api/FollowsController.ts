@@ -3,6 +3,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import BaseController from './BasesController'
 import UserModel from 'App/Models/User'
 import FollowModel from 'App/Models/Follow'
+import ChatViewModel from 'App/Models/ChatView'
 
 export default class FollowsController extends BaseController {
 	public async add(ctx: HttpContextContract) {
@@ -66,10 +67,12 @@ export default class FollowsController extends BaseController {
 		if(!user) return this.notLogged(ctx)
 
 		const unfollow_count = await FollowModel.countunfollower(user.id)
+		const unread = await ChatViewModel.totalUnread(user.id)
 
 		return this.success(ctx, {
 			fetches: {
-				follow_conf: unfollow_count
+				follow_conf: unfollow_count,
+				unread: unread
 			}
 		})
 	}

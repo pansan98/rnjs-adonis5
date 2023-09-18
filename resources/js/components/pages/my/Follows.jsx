@@ -29,6 +29,7 @@ class Follows extends React.Component {
 			chat: {
 				active: false,
 				room_id: null,
+				unreads: [],
 				closefn: () => {}
 			}
 		}
@@ -51,6 +52,7 @@ class Follows extends React.Component {
 			chat: {
 				active: this.config.chat.active,
 				room_id: this.config.chat.room_id,
+				unreads: this.config.chat.unreads,
 				closefn: () => this.config.chat.closefn
 			}
 		}
@@ -170,6 +172,7 @@ class Follows extends React.Component {
 					chat: {
 						active: true,
 						room_id: res.data.room_id,
+						unreads: res.data.unreads,
 						user: this.props.user,
 						closefn: () => {this.closeChat()}
 					}
@@ -369,9 +372,11 @@ class Follows extends React.Component {
 				</Modal>
 
 				<Chat
+				key="page-follow"
 				active={this.state.chat.active}
 				room_id={this.state.chat.room_id}
-				user={this.state.chat.user}
+				unreads={this.state.chat.unreads}
+				user={this.props.user}
 				closefn={this.state.chat.closefn}
 				/>
 			</div>

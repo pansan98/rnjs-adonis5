@@ -66,6 +66,29 @@ class GlobalNav extends React.Component {
 		return (<span></span>)
 	}
 
+	viewUnread() {
+		if(this.state.fetches.unread > 0) {
+			return (
+				<span
+				className="un-read"
+				style={{
+					position: 'absolute',
+					width: '25px',
+					height: '25px',
+					top: '-8px',
+					right: '-5px',
+					borderRadius: '50%',
+					backgroundColor: '#ff0000',
+					color: '#ffffff'
+				}}
+				>
+					{this.state.fetches.unread}
+				</span>
+			)
+		}
+		return (<span></span>)
+	}
+
 	render() {
 		return (
 			<nav className="main-header navbar navbar-expand navbar-white navbar-light">
@@ -84,6 +107,14 @@ class GlobalNav extends React.Component {
 					</li>
 				</ul>
 				<ul className="navbar-nav ml-auto">
+					<li className="nav-item mr-1">
+						<button
+							className="nav-link btn btn-default"
+						>
+							<i className="far fa-comment-dots"></i>
+							{this.viewUnread()}
+						</button>
+					</li>
 					<li className="nav-item mr-1">
 						<Link to={Config.links.follow} className="nav-link btn btn-default">
 							<i className="fas fa-users"></i>

@@ -53,7 +53,9 @@ const Config = {
 		},
 		chat: {
 			log: '/api/chat/log/',
-			start: '/api/chat/start/'
+			start: '/api/chat/start/',
+			read: '/api/chat/read/',
+			bulkread: '/api/chat/bulkread/'
 		}
 	},
 	noimage: '/assets/img/no-image.jpg',
