@@ -274,4 +274,8 @@ class Profile extends React.Component {
 	}
 }
 
+Profile.defaultProps = {
+	user: null
+}
+
 export default Profile;

@@ -70,7 +70,7 @@ class App extends React.Component {
 						<Route path="/event" element={<Event />} />
 						<Route path="/event/create" element={<EventEdit />} />
 						<Route path="/event/category" element={<EventCategory />} />
-						<Route path={Config.links.profile} element={<MyProfile />} />
+						<Route path={Config.links.profile} element={<MyProfile />} user={this.state.user} />
 						<Route path={Config.links.follow} element={<MyFollows user={this.state.user} />} />
 						<Route path="/practice/stop-watch" element={<StopWatch />} />
 						<Route path={Config.links.auth.login} element={<Login />} />
