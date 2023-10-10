@@ -108,6 +108,14 @@ class GlobalNav extends React.Component {
 				</ul>
 				<ul className="navbar-nav ml-auto">
 					<li className="nav-item mr-1">
+						<Link
+						to={Config.links.cms.topics}
+						className="nav-link btn btn-default"
+						>
+							<i className="fas fa-exclamation-triangle"></i>
+						</Link>
+					</li>
+					<li className="nav-item mr-1">
 						<button
 							className="nav-link btn btn-default"
 						>

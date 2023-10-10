@@ -1,5 +1,7 @@
 'use strict'
 
+const admin_content_manager_host = 'http://strapi.local'
+
 const Config = {
 	links : {
 		home: '/',
@@ -27,6 +29,9 @@ const Config = {
 			favorites: '/ec/favorites',
 			history: '/ec/history',
 			review: '/ec/review/:code'
+		},
+		cms: {
+			topics: '/cms/topics'
 		}
 	},
 	api: {
@@ -56,6 +61,9 @@ const Config = {
 			start: '/api/chat/start/',
 			read: '/api/chat/read/',
 			bulkread: '/api/chat/bulkread/'
+		},
+		cms: {
+			topics: admin_content_manager_host+'/api/topics'
 		}
 	},
 	noimage: '/assets/img/no-image.jpg',

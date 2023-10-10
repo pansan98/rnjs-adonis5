@@ -32,6 +32,9 @@ import Authorize from './auth/ParamsAuthorize'
 import Forgot from './auth/Forgot'
 import Password from './auth/ParamsPassword'
 
+// Admin CMS
+import AdminCMSTopics from './pages/cms/topics'
+
 class App extends React.Component {
 	constructor(props) {
 		super(props);
@@ -78,6 +81,7 @@ class App extends React.Component {
 						<Route path={Config.links.auth.forgot} element={<Forgot />} />
 						<Route path={Config.links.auth.authorize} element={<Authorize />} />
 						<Route path={Config.links.auth.password} element={<Password />} />
+						<Route path={Config.links.cms.topics} element={<AdminCMSTopics />} user={this.state.user} />
 					</Routes>
 				</React.Fragment>
 			</BrowserRouter>

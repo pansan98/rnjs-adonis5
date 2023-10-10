@@ -21,6 +21,8 @@ class Chat extends React.Component {
 			loading: false,
 			chatloading: false
 		}
+
+		this.refmessage = React.createRef()
 	}
 
 	componentDidUpdate(prevProps) {
@@ -31,7 +33,9 @@ class Chat extends React.Component {
 				this.socket = io('ws://ws.adonis5.local:8360')
 				this.socket.on('connect', () => {
 					this.socket.on('chat:log:receive-'+this.props.room_id, (data) => {
-						this.setState({logs: data.logs, chatloading: false})
+						this.setState({logs: data.logs, chatloading: false}, () => {
+							this.scrollMessageBottom()
+						})
 						// 未読のものを既読にする
 						this.bulkChatread()
 					})
@@ -48,7 +52,9 @@ class Chat extends React.Component {
 								message: data.message,
 								trx_id: data.trx_id
 							})
-							this.setState({logs: logs})
+							this.setState({logs: logs}, () => {
+								this.scrollMessageBottom()
+							})
 						}
 					})
 
@@ -85,6 +91,10 @@ class Chat extends React.Component {
 		const param = {}
 		param[name] = value
 		this.setState(param)
+	}
+
+	scrollMessageBottom() {
+		this.refmessage.current.scrollIntoView({behavor: 'smooth', block: 'end'})
 	}
 
 	async bulkChatread() {
@@ -136,6 +146,8 @@ class Chat extends React.Component {
 			this.setState({
 				message: '',
 				logs: logs
+			}, () => {
+				this.scrollMessageBottom()
 			})
 		}
 	}
@@ -162,6 +174,7 @@ class Chat extends React.Component {
 								</div>
 							)
 						})}
+						<div ref={this.refmessage}/>
 					</div>
 				</div>
 			)

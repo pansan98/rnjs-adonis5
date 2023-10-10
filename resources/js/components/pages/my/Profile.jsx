@@ -1,5 +1,5 @@
-import React from 'react';
-import axios from 'axios';
+import React from 'react'
+import axios from 'axios'
 import {Link} from 'react-router-dom'
 
 import Config from '../../../config'
@@ -15,7 +15,7 @@ import Error from '../../forms/Error'
 
 class Profile extends React.Component {
 	constructor(props) {
-		super(props);
+		super(props)
 		this.state = {
 			user: {},
 			f_name: '',
@@ -278,4 +278,4 @@ Profile.defaultProps = {
 	user: null
 }
 
-export default Profile;
+export default Profile
