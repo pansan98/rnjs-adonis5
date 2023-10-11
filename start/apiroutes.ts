@@ -38,4 +38,5 @@ Route.group(() => {
 
 Route.group(() => {
 	Route.get('/admin/topics', 'MorphsController.topics')
+	Route.get('/admin/topics/viewed', 'MorphsController.topicviewed')
 }).prefix('/api/morphs').namespace('App/Controllers/Api')

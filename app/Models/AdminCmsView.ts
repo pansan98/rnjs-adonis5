@@ -24,10 +24,18 @@ export default class AdminCmsView extends BaseModel {
 	public updatedAt: DateTime
 
 	public static async findviews(user_id: number, type: string) {
-		return await Database.from(AdminCmsView.table)
+		const ids: number[] = []
+		const results: {morphs_id: number}[] = await Database.from(AdminCmsView.table)
 			.select('morphs_id')
 			.where('user_id', user_id)
 			.where('morphs_type', type)
 			.exec()
+		
+		if(results.length) {
+			results.map((result: {morphs_id: number}) => {
+				ids.push(result.morphs_id)
+			})
+		}
+		return ids
 	}
 }

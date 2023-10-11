@@ -46,6 +46,7 @@
     "@japa/runner": "^2.5.1",
     "@popperjs/core": "^2.11.8",
     "@types/proxy-addr": "^2.0.0",
+    "@types/qs": "^6.9.8",
     "@types/socket.io-client": "^3.0.0",
     "@types/source-map-support": "^0.5.7",
     "adonis-preset-ts": "^2.1.0",

@@ -1,3 +1,5 @@
+import qs from 'qs'
+
 class Utils {
 	constructor(){}
 
@@ -89,8 +91,10 @@ class Utils {
 			if(method === 'POST') {
 				baseparams.body = JSON.stringify(params)
 			} else {
-				const querystring = new URLSearchParams(params).toString()
-				endpoint = endpoint+'?'+querystring
+				const querystring = qs.stringify(params)
+				if(querystring) {
+					endpoint = endpoint+'?'+querystring
+				}
 			}
 			fetch(endpoint, baseparams).then((res) => {
 				if(res.ok) {

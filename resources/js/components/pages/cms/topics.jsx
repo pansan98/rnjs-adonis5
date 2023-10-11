@@ -1,5 +1,4 @@
 import React from 'react'
-import axios from 'axios'
 
 import Config from '../../../config'
 import Utils from '../../../plugins/Utils'
@@ -35,7 +34,14 @@ class Topics extends React.Component {
 	}
 
 	viewed(morphs_id) {
-
+		Utils.api('get', Config.api.morphs.admin.topics.viewed, {
+			morphs_id: morphs_id,
+			morphs_type: 'topics'
+		}).then((json) => {
+			const viewed = this.state.viewed
+			viewed.push(morphs_id)
+			this.setState({viewed: viewed})
+		})
 	}
 
 	contents() {
@@ -55,7 +61,7 @@ class Topics extends React.Component {
 													表示
 												</button>
 												{(!this.state.viewed.includes(v.id))?
-												<button className="btn btn-warning btn-sm ml-1" onClick={(e) => this.viewed(e, v.id)}>
+												<button className="btn btn-warning btn-sm ml-1" onClick={(e) => this.viewed(v.id)}>
 													既読
 												</button>
 												:''}

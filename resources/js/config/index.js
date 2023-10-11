@@ -65,7 +65,8 @@ const Config = {
 		morphs: {
 			admin: {
 				topics: {
-					views: '/api/morphs/admin/topics'
+					views: '/api/morphs/admin/topics',
+					viewed: '/api/morphs/admin/topics/viewed'
 				}
 			}
 		},
