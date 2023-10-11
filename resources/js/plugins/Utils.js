@@ -76,6 +76,40 @@ class Utils {
 		})
 	}
 
+	static async api(method, endpoint, params, auth) {
+		return new Promise((resolve, reject) => {
+			const mt = method.toUpperCase()
+			const baseparams = {
+				method: mt,
+				credentials: 'same-origin',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			}
+			if(method === 'POST') {
+				baseparams.body = JSON.stringify(params)
+			} else {
+				const querystring = new URLSearchParams(params).toString()
+				endpoint = endpoint+'?'+querystring
+			}
+			fetch(endpoint, baseparams).then((res) => {
+				if(res.ok) {
+					return res.json()
+				}
+				reject()
+			}).then((json) => {
+				if(auth) {
+					if(typeof json.login !== 'undefined') {
+						if(!json.login) {
+							reject({error: 'regenerate login'})
+						}
+					}
+				}
+				resolve(json)
+			})
+		})
+	}
+
 	errorHandler(e) {
 		throw new Error(e.message)
 	}

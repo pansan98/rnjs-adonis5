@@ -62,8 +62,17 @@ const Config = {
 			read: '/api/chat/read/',
 			bulkread: '/api/chat/bulkread/'
 		},
-		cms: {
-			topics: admin_content_manager_host+'/api/topics'
+		morphs: {
+			admin: {
+				topics: {
+					views: '/api/morphs/admin/topics'
+				}
+			}
+		},
+		external: {
+			cms: {
+				topics: admin_content_manager_host+'/api/topics'
+			}
 		}
 	},
 	noimage: '/assets/img/no-image.jpg',

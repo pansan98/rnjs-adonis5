@@ -33,7 +33,7 @@ class GlobalNav extends React.Component {
 		this.setState({loading: true})
 		await axios.post(Config.api.auth.logout, {
 			credentials: 'same-origin'
-		}).then((res) => { 
+		}).then((res) => {
 			if(res.data.result) {
 				window.location.href = Config.links.auth.login
 			}
