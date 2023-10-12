@@ -88,7 +88,7 @@ class Utils {
 					'Content-Type': 'application/json'
 				}
 			}
-			if(method === 'POST') {
+			if(mt === 'POST') {
 				baseparams.body = JSON.stringify(params)
 			} else {
 				const querystring = qs.stringify(params)
@@ -110,6 +110,8 @@ class Utils {
 					}
 				}
 				resolve(json)
+			}).catch((e) => {
+				reject(e)
 			})
 		})
 	}

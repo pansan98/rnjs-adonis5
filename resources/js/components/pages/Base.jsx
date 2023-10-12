@@ -13,7 +13,7 @@ class Base extends React.Component {
 	render() {
 		return (
 			<div className="wrapper">
-				<PageLoader />
+				<PageLoader is_loading={this.props.pageloading}/>
 				<Loader is_loading={this.props.loading}/>
 				<GlobalNav />
 				<SideMenu user={this.props.user}/>
@@ -41,7 +41,8 @@ class Base extends React.Component {
 Base.defaultProps = {
 	title: '',
 	content: '',
-	loading: false
+	loading: false,
+	pageloading: true
 }
 
 export default Base;

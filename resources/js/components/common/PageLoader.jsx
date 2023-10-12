@@ -3,17 +3,18 @@ import React from 'react'
 class PageLoader extends React.Component {
 	constructor(props) {
 		super(props)
-		this.state = {
-			loaded: false
-		}
 		this.loader
 	}
 
 	componentDidMount() {
 		this.loader = document.getElementById('page-loader')
-		setTimeout((e) => {
-			this.done()
-		}, 200)
+		if(this.props.is_loading) {
+			setTimeout((e) => {
+				this.done()
+			}, 200)
+		} else {
+			this.loader.style.display = 'none'
+		}
 	}
 
 	done()
@@ -30,6 +31,10 @@ class PageLoader extends React.Component {
 			</div>
 		)
 	}
+}
+
+PageLoader.defaultProps = {
+	is_loading: true
 }
 
 export default PageLoader

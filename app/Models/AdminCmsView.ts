@@ -38,4 +38,19 @@ export default class AdminCmsView extends BaseModel {
 		}
 		return ids
 	}
+
+	public static async morphs_viewed(user_id: number, morphs_id: number, morphs_type: string) {
+		const morphs = await AdminCmsView.query()
+			.where('user_id', user_id)
+			.where('morphs_id', morphs_id)
+			.where('morphs_type', morphs_type)
+			.first()
+		if(!morphs) {
+			await AdminCmsView.create({
+				user_id: user_id,
+				morphs_id: morphs_id,
+				morphs_type: morphs_type
+			})
+		}
+	}
 }

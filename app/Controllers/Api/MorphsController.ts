@@ -1,6 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import BaseController from './BasesController'
 import AdminCmsViewModel from 'App/Models/AdminCmsView'
+import AdminCmsView from 'App/Models/AdminCmsView'
 
 export default class MorphsController extends BaseController {
 	public async topics(ctx: HttpContextContract) {
@@ -18,19 +19,10 @@ export default class MorphsController extends BaseController {
 		const ud = await this.ud(ctx)
 		if(!ud) return this.fail(ctx)
 
-		const query = ctx.request.qs()
-		const viewed = await AdminCmsViewModel.query()
-			.where('user_id', ud.id)
-			.where('morphs_id', query.morpsh_id)
-			.where('morphs_type', query.morphs_type)
-			.first()
-		if(!viewed) {
-			await AdminCmsViewModel.create({
-				user_id: ud.id,
-				morphs_id: query.morphs_id,
-				morphs_type: query.morphs_type
-			})
-		}
+		const morphs_id = await ctx.request.input('morphs_id')
+		const morphs_type = await ctx.request.input('morphs_type')
+		AdminCmsView.morphs_viewed(ud.id, morphs_id, morphs_type)
+		
 		return this.success(ctx)
 	}
 }
