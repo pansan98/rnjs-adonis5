@@ -48,7 +48,9 @@ class Topics extends React.Component {
 			this.setState({viewed: json.views})
 		}).then(() => {
 			Utils.api('get', Config.api.external.cms.topics, {
-				sort: 'public_date:desc'
+				'sort[0]': 'public_date:desc',
+				'sort[1]': 'id:desc',
+				'populate[0]': 'thumbnail'
 			}, false).then((json) => {
 				this.setState({
 					topics: json.data,
