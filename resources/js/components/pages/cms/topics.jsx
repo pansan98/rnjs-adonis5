@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactMarkdown from 'react-markdown'
 
 import Config from '../../../config'
 import Utils from '../../../plugins/Utils'
@@ -6,7 +7,6 @@ import Utils from '../../../plugins/Utils'
 import Loader from '../../common/Loader'
 import Base from '../Base'
 import Modal from '../../plugins/Modal'
-import Reactnl2br from 'react-nl2br'
 
 class Topics extends React.Component {
 	constructor(props) {
@@ -101,9 +101,10 @@ class Topics extends React.Component {
 				<div>
 					<div className="card card-list">
 						<div className="card-body">
-							<h3>{this.state.topic.attributes.public_date}</h3>
+							<h3 className="pb-10">日時：{this.state.topic.attributes.public_date}</h3>
+							<hr/>
 							<div>
-							{Reactnl2br(this.state.topic.attributes.contents)}
+								<ReactMarkdown>{this.state.topic.attributes.contents}</ReactMarkdown>
 							</div>
 						</div>
 					</div>
