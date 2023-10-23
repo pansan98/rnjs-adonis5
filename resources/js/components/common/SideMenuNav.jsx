@@ -1,6 +1,8 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 
+import Config from '../../config'
+
 class SideMenuNav extends React.Component {
 	constructor(props) {
 		super(props)
@@ -38,6 +40,12 @@ class SideMenuNav extends React.Component {
 						<Link to="/event" className="nav-link">
 							<i className="nav-icon fas fa-calendar-week"></i>
 							<p>Event Dashboard</p>
+						</Link>
+					</li>
+					<li className="nav-item">
+						<Link to={Config.links.google.calendar} className="nav-link">
+							<i className="nav-icon fas fa-calendar-week"></i>
+							<p>Google Events</p>
 						</Link>
 					</li>
 				</ul>

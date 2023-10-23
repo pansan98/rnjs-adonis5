@@ -32,6 +32,9 @@ const Config = {
 		},
 		cms: {
 			topics: '/cms/topics'
+		},
+		google: {
+			calendar: '/google/calendar'
 		}
 	},
 	api: {

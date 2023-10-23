@@ -35,6 +35,9 @@ import Password from './auth/ParamsPassword'
 // Admin CMS
 import AdminCMSTopics from './pages/cms/topics'
 
+// Google Calendar
+import GoogleCalendar from './pages/google/Calendar'
+
 class App extends React.Component {
 	constructor(props) {
 		super(props);
@@ -73,7 +76,7 @@ class App extends React.Component {
 						<Route path="/event" element={<Event />} />
 						<Route path="/event/create" element={<EventEdit />} />
 						<Route path="/event/category" element={<EventCategory />} />
-						<Route path={Config.links.profile} element={<MyProfile />} user={this.state.user} />
+						<Route path={Config.links.profile} element={<MyProfile user={this.state.user} />} />
 						<Route path={Config.links.follow} element={<MyFollows user={this.state.user} />} />
 						<Route path="/practice/stop-watch" element={<StopWatch />} />
 						<Route path={Config.links.auth.login} element={<Login />} />
@@ -81,7 +84,8 @@ class App extends React.Component {
 						<Route path={Config.links.auth.forgot} element={<Forgot />} />
 						<Route path={Config.links.auth.authorize} element={<Authorize />} />
 						<Route path={Config.links.auth.password} element={<Password />} />
-						<Route path={Config.links.cms.topics} element={<AdminCMSTopics />} user={this.state.user} />
+						<Route path={Config.links.cms.topics} element={<AdminCMSTopics user={this.state.user} />} />
+						<Route path={Config.links.google.calendar} element={<GoogleCalendar user={this.state.user} />}/>
 					</Routes>
 				</React.Fragment>
 			</BrowserRouter>
