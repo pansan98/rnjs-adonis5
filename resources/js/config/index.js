@@ -73,6 +73,11 @@ const Config = {
 				}
 			}
 		},
+		google: {
+			event: {
+				create: '/api/google/event/create'
+			}
+		},
 		external: {
 			cms: {
 				topics: admin_content_manager_host+'/api/topics'

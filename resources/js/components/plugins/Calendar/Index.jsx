@@ -49,13 +49,13 @@ class Calendar extends React.Component {
 								</div>
 								<div className="fc-view-harness fc-view-harness-active">
 									<div className="fc-daygrid fc-dayGridMonth-view fc-view">
-										<table role="grid" className="fc-scrollgrid table-bordered fc-scrollgrid-liquid">
+										<table role="grid" className="fc-scrollgrid table-bordered fc-scrollgrid-liquid" style={{width: '100%', maxWidth: '2000px', minWidth: '805px'}}>
 											<thead rol="rowgroup">
 												<tr role="presentation" className="fc-scrollgrid-section fc-scrollgrid-section-header">
 													<th role="presentation">
 														<div className="fc-scroller-harness">
 															<div className="fc-scroller" style={{overflow: 'hidden'}}>
-																<table role="presentation" className="fc-col-header" style={{width: '805px'}}>
+																<table role="presentation" className="fc-col-header" style={{width: '100%', maxWidth: '2000px', minWidth: '805px'}}>
 																	<thead role="presentation">
 																		<tr role="row">
 																			<th role="columnheader" className="fc-col-header-cell fc-day fc-day-sun">
@@ -106,8 +106,10 @@ class Calendar extends React.Component {
 													<td role="presentation">
 														<div className="fc-scroller-harness fc-scroller-harness-liquid">
 															<div className="fc-scroller fc-scroller-liquid-absolute" style={{overflow: 'hidden'}}>
-																<div className="fc-daygrid-body fc-daygrid-body-unbalanced" style={{width: '805px'}}>
-																	<CalendarWeek/>
+																<div className="fc-daygrid-body fc-daygrid-body-unbalanced" style={{width: '100%', maxWidth: '2000px', minWidth: '805px'}}>
+																	<CalendarWeek
+																	clickDay={(year, month, day) => this.props.clickDay(year, month, day)}
+																	/>
 																</div>
 															</div>
 														</div>

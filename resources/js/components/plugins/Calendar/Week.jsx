@@ -26,13 +26,21 @@ class Week extends React.Component {
 
 	render() {
 		return (
-			<table role="presentation" className="fc-scrollgrid-sync-table" style={{width: '805px', height: '566px'}}>
+			<table role="presentation" className="fc-scrollgrid-sync-table" style={{width: '100%', maxWidth: '2000px', minWidth: '805px', height: '566px'}}>
 				<tbody role="presentation">
 					{this.state.days.map((weeks, wk) => {
 						return (
 							<tr role="row" key={`week-${wk}`}>
 								{weeks.map((day, dk) => {
-									return (<Day key={`day-${dk}`} day={day} week={wk} date={`2023-10-${day}`}/>)
+									return (
+										<Day
+											key={`day-${dk}`}
+											day={day}
+											week={wk}
+											date={`2023-10-${day}`}
+											clickDay={(year, month, day) => this.props.clickDay(year, month, day)}
+										/>
+									)
 								})}
 							</tr>
 						)
