@@ -1,6 +1,7 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 
+import Config from '../../../config'
 import Utils from '../../../plugins/Utils'
 
 import Base from '../Base'
@@ -33,6 +34,7 @@ class Schedule extends React.Component {
 			title: '',
 			description: '',
 			errors: {
+				system: [],
 				title: []
 			},
 			create: {
@@ -66,7 +68,7 @@ class Schedule extends React.Component {
 
 	async eventCreate(year, month, day) {
 		this.setState({loading: true})
-		await Utils.api('post', Config.api.google.event.create, {
+		await Utils.apiHandler('post', Config.api.google.event.create, {
 			date: {
 				year: year,
 				month: month,
@@ -102,6 +104,7 @@ class Schedule extends React.Component {
 			<div>
 				<div className="card">
 					<div className="card-body">
+						<Error error={this.state.errors.system}/>
 						<Text
 							formName="title"
 							type="text"

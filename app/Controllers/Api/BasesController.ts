@@ -1,8 +1,10 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import UserModel from 'App/Models/User'
+import ValidateWrap from 'App/Helpers/ValidateWrap'
 
 export default class BasesController {
+	protected validator_errors = {}
 	protected async success(ctx: HttpContextContract, params?: {}) {
 		ctx.response.status(200).json(Object.assign({result: true}, params))
 	}
@@ -24,5 +26,20 @@ export default class BasesController {
 		return this.fail(ctx, {errors: {
 			system: ['ログインしてください。']
 		}})
+	}
+
+	protected async validate(ctx: HttpContextContract, Validate) {
+		try {
+			await ctx.request.validate(Validate)
+		} catch(error) {
+			const errorwrap = ValidateWrap.apiwrap(error.messages)
+			this.validator_errors = errorwrap
+			return false
+		}
+		return true
+	}
+
+	protected get_validator_errors() {
+		return this.validator_errors
 	}
 }

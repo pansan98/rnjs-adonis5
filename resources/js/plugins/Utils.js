@@ -31,7 +31,7 @@ class Utils {
 		return s
 	}
 
-	async apiHandler(method, endpoint, params, final) {
+	static async apiHandler(method, endpoint, params, final) {
 		method = method.toUpperCase()
 		const d_params = {credentials: 'same-origin'}
 		let p = {}
@@ -52,7 +52,7 @@ class Utils {
 					resolve(res)
 				}).catch((e) => {
 					reject(e)
-					this.errorHandler(e)
+					// this.errorHandler(e)
 				}).finally(() => {
 					if(typeof final === 'function') {
 						final()
@@ -68,7 +68,7 @@ class Utils {
 					resolve(res)
 				}).catch((e) => {
 					reject(e)
-					this.errorHandler(e)
+					// this.errorHandler(e)
 				}).finally(() => {
 					if(typeof final === 'function') {
 						final()

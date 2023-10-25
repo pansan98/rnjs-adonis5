@@ -40,3 +40,7 @@ Route.group(() => {
 	Route.get('/admin/topics', 'MorphsController.topics')
 	Route.post('/admin/topics/viewed', 'MorphsController.topicviewed')
 }).prefix('/api/morphs').namespace('App/Controllers/Api')
+
+Route.group(() => {
+	Route.post('/event/create', 'EventsController.create')
+}).prefix('/api/google').namespace('App/Controllers/Api/Google')
