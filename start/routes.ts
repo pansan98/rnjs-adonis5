@@ -19,11 +19,13 @@
 */
 
 import './apiroutes'
+import './oauthroutes'
 
 import Route from '@ioc:Adonis/Core/Route'
 
 // Route.get('/', async ({ view }) => {
 // 	return view.render('welcome')
 // })
+
 Route.get('/auth/*', 'AuthController.index').middleware('mymember')
 Route.get('*', 'AppsController.index').middleware('myauth')
