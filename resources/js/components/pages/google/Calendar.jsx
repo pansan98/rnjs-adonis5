@@ -23,6 +23,16 @@ class Schedule extends React.Component {
 					title: 'イベントを追加',
 					classes: ['modal-lg'],
 					success: true,
+					success_text: '登録',
+					closefn: () => {},
+					callbackfn: () => {}
+				},
+				snsauth: {
+					active: false,
+					title: 'Googleアカウントと連携',
+					classes: ['modal-lg'],
+					success: true,
+					success_text: '連携',
 					closefn: () => {},
 					callbackfn: () => {}
 				}
@@ -33,6 +43,8 @@ class Schedule extends React.Component {
 			loading: false,
 			title: '',
 			description: '',
+			oauthredirect: '',
+			connected: false,
 			errors: {
 				system: [],
 				title: []
@@ -44,8 +56,64 @@ class Schedule extends React.Component {
 				success: this.config.modals.create.success,
 				closefn: () => this.config.modals.create.closefn,
 				callbackfn: () => this.config.modals.create.callbackfn
+			},
+			snsauth: {
+				active: this.config.modals.snsauth.active,
+				title: this.config.modals.snsauth.title,
+				classes: this.config.modals.snsauth.classes,
+				success: this.config.modals.snsauth.success,
+				success_text: this.config.modals.snsauth.success_text,
+				closefn: () => this.config.modals.snsauth.closefn,
+				callbackfn: () => this.config.modals.snsauth.callbackfn
 			}
 		}
+	}
+
+	componentDidMount() {
+		this.events()
+	}
+
+	async events() {
+		this.setState({loading: true})
+		await Utils.api('GET', Config.api.google.event.events).then((json) => {
+			if(!json.auth) {
+				this.setState({oauthredirect: json.data.redirect_url})
+				this.activeSnsOAuth()
+			} else {
+				this.setState({connected: true})
+			}
+		})
+		this.setState({loading: false})
+	}
+
+	activeSnsOAuth() {
+		this.setState({
+			snsauth: Object.assign(this.config.modals.snsauth, {
+				active: true,
+				closefn: () => {this.closeSnsOAuth()},
+				callbackfn: () => {this.connectSnsOAuth()}
+			})
+		})
+	}
+
+	connectSnsOAuth() {
+		window.location = this.state.oauthredirect
+	}
+
+	closeSnsOAuth() {
+		this.setState({
+			snsauth: Object.assign(this.config.modals.snsauth, {
+				active: false
+			})
+		})
+	}
+
+	viewSnsOAuth() {
+		return (
+			<div>
+				<p>Googleアカウントと連携できていません。<br/>登録済みのイベントを取得、登録を行うには連携が必要です。</p>
+			</div>
+		)
 	}
 
 	handlerState(name, value) {
@@ -126,23 +194,50 @@ class Schedule extends React.Component {
 	}
 
 	contents() {
-		return (
-			<div>
-				<Calendar
-					clickDay={(year, month, day) => this.clickDay(year, month, day)}
-				/>
-				<Modal
-					title={this.state.create.title}
-					active={this.state.create.active}
-					classes={this.state.create.classes}
-					success={this.state.create.success}
-					closefn={this.state.create.closefn}
-					callbackfn={this.state.create.callbackfn}
-				>
-					{this.viewCreate()}
-				</Modal>
-			</div>
-		)
+		if(this.connected) {
+			return (
+				<div>
+					<Calendar
+						clickDay={(year, month, day) => this.clickDay(year, month, day)}
+					/>
+					<Modal
+						title={this.state.create.title}
+						active={this.state.create.active}
+						classes={this.state.create.classes}
+						success={this.state.create.success}
+						closefn={this.state.create.closefn}
+						callbackfn={this.state.create.callbackfn}
+					>
+						{this.viewCreate()}
+					</Modal>
+				</div>
+			)
+		} else {
+			return (
+				<div>
+					<div>
+						<div>Googleカレンダーと連携できていません。</div>
+						<button
+							className="btn btn-primary ml-auto"
+							onClick={(e) => this.connectSnsOAuth()}
+							>
+								連携
+						</button>	
+					</div>
+					<Modal
+						title={this.state.snsauth.title}
+						active={this.state.snsauth.active}
+						classes={this.state.snsauth.classes}
+						success={this.state.snsauth.success}
+						success_text={this.state.snsauth.success_text}
+						closefn={this.state.snsauth.closefn}
+						callbackfn={this.state.snsauth.callbackfn}
+					>
+						{this.viewSnsOAuth()}
+					</Modal>
+				</div>
+			)
+		}
 	}
 
 	render() {

@@ -6,8 +6,8 @@ import GoogleOAuth from 'App/Modules/OAuth/Google/GoogleOAuth'
 export default class BasesController extends Controller {
 	protected googleOAuth: GoogleOAuth
 	
-	constructor(OAuth: GoogleOAuth) {
+	constructor() {
 		super()
-		this.googleOAuth = OAuth
+		this.googleOAuth = new GoogleOAuth()
 	}
 }

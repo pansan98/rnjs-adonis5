@@ -49,7 +49,7 @@ class Modal extends React.Component {
 				className="btn btn-primary ml-auto"
 				onClick={(e) => this.props.callbackfn()}
 				>
-					Save
+					{this.props.success_text}
 				</button>
 				: ''}
 			</div>
@@ -89,6 +89,7 @@ Modal.defaultProps = {
 	close: true,
 	closefn: () => {},
 	success: true,
+	success_text: 'Save',
 	callbackfn: () => {}
 }
 

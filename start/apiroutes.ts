@@ -43,4 +43,5 @@ Route.group(() => {
 
 Route.group(() => {
 	Route.post('/event/create', 'EventsController.create')
+	Route.get('/event/events', 'EventsController.events')
 }).prefix('/api/google').namespace('App/Controllers/Api/Google')

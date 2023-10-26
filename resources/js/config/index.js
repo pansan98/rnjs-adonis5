@@ -75,7 +75,8 @@ const Config = {
 		},
 		google: {
 			event: {
-				create: '/api/google/event/create'
+				create: '/api/google/event/create',
+				events: '/api/google/event/events'
 			}
 		},
 		external: {
