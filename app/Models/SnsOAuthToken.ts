@@ -38,4 +38,12 @@ export default class SnsOAuthToken extends BaseModel {
 		const expire = OAuthToken.created_token_at + OAuthToken.expire
 		return expire > now.getTime()
 	}
+
+	public static async exists(user_id: number, sns: string) {
+		const oauth = await SnsOAuthToken.query()
+			.where('user_id', user_id)
+			.where('sns', sns)
+			.first()
+		return oauth
+	}
 }

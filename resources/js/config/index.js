@@ -35,6 +35,11 @@ const Config = {
 		},
 		google: {
 			calendar: '/google/calendar'
+		},
+		oauth: {
+			verify: {
+				google: '/oatuh/verify/google'
+			}
 		}
 	},
 	api: {

@@ -1,6 +1,7 @@
 import ModuleOAuth from 'App/Modules/OAuth'
 import Env from '@ioc:Adonis/Core/Env'
 import {google} from 'googleapis'
+import {Credentials} from 'google-auth-library/build/src/auth/credentials'
 
 import SnsOAuthToken from 'App/Models/SnsOAuthToken'
 
@@ -27,6 +28,15 @@ export default class GoogleOAuth extends ModuleOAuth {
 		})
 
 		return oauth_url
+	}
+
+	public async oauthVerify(code: string) {
+		const redirect_uri = Env.get('OATUH_GOOGLE_REDIRECT_URI')
+		const googleOAuth = new google.auth.OAuth2(this.client_id, this.secret_id, redirect_uri)
+		const tokens: Credentials = await googleOAuth.getToken(code).then((tokenResponse) => {
+			return tokenResponse?.tokens
+		})
+		return tokens
 	}
 
 	protected async checkToken(user_id: number) {

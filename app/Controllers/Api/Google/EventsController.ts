@@ -11,7 +11,7 @@ export default class EventsController extends GoogleController {
 		// トークンが有効であるか確認
 		const auth = await this.googleOAuth.auth(user.id)
 		if(!auth) {
-			const redirect_url = this.googleOAuth.redirect_oauth()
+			const redirect_url = await this.googleOAuth.redirect_oauth()
 			return this.success(ctx, {
 				auth: false,
 				data: {

@@ -38,12 +38,16 @@ import AdminCMSTopics from './pages/cms/topics'
 // Google Calendar
 import GoogleCalendar from './pages/google/Calendar'
 
+// OAuth verify
+import OAuthVerify from './pages/oauth/Verify'
+
 class App extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			user: {}
 		}
+		this.jsdata = AdonisJsData
 	}
 
 	componentDidMount() {
@@ -86,6 +90,7 @@ class App extends React.Component {
 						<Route path={Config.links.auth.password} element={<Password />} />
 						<Route path={Config.links.cms.topics} element={<AdminCMSTopics user={this.state.user} />} />
 						<Route path={Config.links.google.calendar} element={<GoogleCalendar user={this.state.user} />}/>
+						<Route path={Config.links.oauth.verify.google} element={<OAuthVerify jsdata={this.jsdata} />}/>
 					</Routes>
 				</React.Fragment>
 			</BrowserRouter>
