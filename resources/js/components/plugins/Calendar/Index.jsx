@@ -25,6 +25,7 @@ class Calendar extends React.Component {
 											className="fc-prev-button btn btn-primary"
 											title="Previus month"
 											aria-pressed="false"
+											onClick={() => this.props.clickPrevMonth()}
 											>
 												<span className="fa fa-chevron-left"></span>
 											</button>
@@ -33,13 +34,14 @@ class Calendar extends React.Component {
 											className="fc-next-button btn btn-primary"
 											title="Next month"
 											aria-pressed="false"
+											onClick={() => this.props.clickNextMonth()}
 											>
 												<span className="fa fa-chevron-right"></span>
 											</button>
 										</div>
 									</div>
 									<div className="fc-toolbar-chunk">
-										<h2 id="fc-dom-month" className="fc-toolbar-title">2023 10</h2>
+										<h2 id="fc-dom-month" className="fc-toolbar-title">{this.props.viewYear} {this.props.viewMonth}</h2>
 									</div>
 									<div className="fc-toolbar-chunk">
 										<div className="btn-group">
@@ -109,6 +111,8 @@ class Calendar extends React.Component {
 																<div className="fc-daygrid-body fc-daygrid-body-unbalanced" style={{width: '100%', maxWidth: '2000px', minWidth: '805px'}}>
 																	<CalendarWeek
 																	clickDay={(year, month, day) => this.props.clickDay(year, month, day)}
+																	viewYear={this.props.viewYear}
+																	viewMonth={this.props.viewMonth}
 																	/>
 																</div>
 															</div>
@@ -126,6 +130,13 @@ class Calendar extends React.Component {
 			</div>
 		)
 	}
+}
+
+Calendar.defaultProps = {
+	viewYear: '',
+	viewMonth: '',
+	clickPrevMonth: () => {},
+	clickNextMonth: () => {}
 }
 
 export default Calendar
