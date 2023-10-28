@@ -21,7 +21,8 @@ export default class EventsController extends GoogleController {
 		}
 		// イベント情報をとる
 		return this.success(ctx, {
-			auth: true
+			auth: true,
+			events: []
 		})
 	}
 

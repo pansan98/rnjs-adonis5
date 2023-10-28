@@ -14,7 +14,8 @@ export default class GoogleOAuth extends ModuleOAuth {
 		this.secret_key = Env.get('OAUTH_GOOGLE_SECRET_KEY')
 		this.scopes = [
 			'https://www.googleapis.com/auth/calendar.readonly',
-			'https://www.googleapis.com/auth/calendar.events'
+			'https://www.googleapis.com/auth/calendar.events',
+			'https://www.googleapis.com/auth/userinfo.email'
 		]
 	}
 
@@ -43,6 +44,8 @@ export default class GoogleOAuth extends ModuleOAuth {
 			Logger.info(e)
 			return null
 		})
+		// gmailが必要(リフレッシュトークン時も)
+		googleOAuth.getTokenInfo('')
 		return tokens
 	}
 
