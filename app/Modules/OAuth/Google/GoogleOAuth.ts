@@ -4,15 +4,13 @@ import {google} from 'googleapis'
 import {Credentials} from 'google-auth-library/build/src/auth/credentials'
 
 import SnsOAuthToken from 'App/Models/SnsOAuthToken'
+import Logger from 'App/Modules/Logger'
 
 export default class GoogleOAuth extends ModuleOAuth {
-	private client_id: string
-	private secret_id: string
-
 	constructor() {
 		super()
 		this.client_id = Env.get('OAUTH_GOOGLE_CLIENT_ID')
-		this.secret_id = Env.get('OAUTH_GOOGLE_SECRET_ID')
+		this.secret_key = Env.get('OAUTH_GOOGLE_SECRET_KEY')
 	}
 
 	public async auth(user_id: number) {
@@ -20,23 +18,36 @@ export default class GoogleOAuth extends ModuleOAuth {
 	}
 
 	public async redirect_oauth() {
-		const redirect_uri = Env.get('OATUH_GOOGLE_REDIRECT_URI')
-		const googleOAuth = new google.auth.OAuth2(this.client_id, this.secret_id, redirect_uri)
+		const redirect_uri = Env.get('OAUTH_GOOGLE_REDIRECT_URI')
+		const googleOAuth = new google.auth.OAuth2(this.client_id, this.secret_key, redirect_uri)
 		const oauth_url = googleOAuth.generateAuthUrl({
 			access_type: 'offline',
-			scope: ['https://www.googleapis.com/auth/calendar.readonly', 'https://www.googleapis.com/auth/calendar.events']
+			scope: ['https://www.googleapis.com/auth/calendar.readonly', 'https://www.googleapis.com/auth/calendar.events'],
+			prompt: 'consent'
 		})
 
 		return oauth_url
 	}
 
 	public async oauthVerify(code: string) {
-		const redirect_uri = Env.get('OATUH_GOOGLE_REDIRECT_URI')
-		const googleOAuth = new google.auth.OAuth2(this.client_id, this.secret_id, redirect_uri)
-		const tokens: Credentials = await googleOAuth.getToken(code).then((tokenResponse) => {
+		const redirect_uri = Env.get('OAUTH_GOOGLE_REDIRECT_URI')
+		const googleOAuth = new google.auth.OAuth2(this.client_id, this.secret_key, redirect_uri)
+		const tokens: Credentials | null = await googleOAuth.getToken(code).then((tokenResponse) => {
 			return tokenResponse?.tokens
+		}).catch((e) => {
+			Logger.info(e)
+			return null
 		})
 		return tokens
+	}
+
+	public async getRefreshToken(access_token: string) {
+		const redirect_uri = Env.get('OAUTH_GOOGLE_REDIRECT_URI')
+		const googleOAuth = new google.auth.OAuth2(this.client_id, this.secret_key, redirect_uri)
+		const refresh_token = await googleOAuth.getTokenInfo(access_token).then((tokenInfo) => {
+			Logger.info(tokenInfo)
+		})
+		return refresh_token
 	}
 
 	protected async checkToken(user_id: number) {
@@ -46,17 +57,19 @@ export default class GoogleOAuth extends ModuleOAuth {
 			.first()
 		if(snsToken) {
 			if(SnsOAuthToken.expire(snsToken)) return true
-			const token = await this.refreshToken(snsToken)
-			if(token) {
-				return true
-			}
+			// const token = await this.refreshToken(snsToken)
+			// if(token) {
+			// 	return true
+			// }
 		}
 
 		return false
 	}
 
 	protected async refreshToken(token: SnsOAuthToken) {
-
+		const redirect_uri = Env.get('OAUTH_GOOGLE_REDIRECT_URI')
+		const googleOAuth = new google.auth.OAuth2(this.client_id, this.secret_key, redirect_uri)
+		googleOAuth.refreshAccessToken()
 		return 'a'
 	}
 }

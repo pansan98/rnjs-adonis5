@@ -1,0 +1,24 @@
+{
+	"appenders": {
+		"info": {
+			"type": "file",
+			"pattern": "yyyyMMdd",
+			"numBuckups": 10,
+			"layout": {
+				"type": "pattern",
+				"pattern": "[%d] [%-5p] %-6c -%m"
+			},
+			"filename": "logs/info.log"
+		}
+	},
+	"categories": {
+		"default": {
+			"appenders": ["info"],
+			"level": "debug"
+		},
+		"info": {
+			"appenders": ["info"],
+			"level": "debug"
+		}
+	}
+}

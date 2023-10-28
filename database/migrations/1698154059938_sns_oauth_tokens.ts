@@ -10,12 +10,8 @@ export default class extends BaseSchema {
       table.string('sns', 100).notNullable()
       table.string('token', 255).notNullable()
       table.string('refresh_token', 255).notNullable()
-      table.timestamp('created_token_at', {
-        useTz: true
-      })
-      table.timestamp('expire', {
-        useTz: true
-      })
+      table.bigInteger('created_token_at').unsigned().notNullable()
+      table.bigInteger('expire').unsigned().notNullable()
 
       table.timestamps()
       /**

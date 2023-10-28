@@ -26,4 +26,8 @@ class Verify extends React.Component {
 	}
 }
 
+Verify.defaultProps = {
+	jsdata: {}
+}
+
 export default Verify

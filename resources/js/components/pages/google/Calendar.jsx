@@ -194,7 +194,7 @@ class Schedule extends React.Component {
 	}
 
 	contents() {
-		if(this.connected) {
+		if(this.state.connected) {
 			return (
 				<div>
 					<Calendar
@@ -241,7 +241,7 @@ class Schedule extends React.Component {
 	}
 
 	render() {
-		return (<Base title="今後の予定" content={this.contents()} loading={this.state.loading}/>)
+		return (<Base title="今後の予定" content={this.contents()} pageloading={false} loading={this.state.loading}/>)
 	}
 }
 
