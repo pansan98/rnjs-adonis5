@@ -5,6 +5,98 @@ import CalendarWeek from './Week'
 class Calendar extends React.Component {
 	constructor(props) {
 		super(props)
+
+		const now = new Date()
+		this.state = {
+			year: now.getFullYear(),
+			month: now.getMonth() + 1,
+			days: []
+		}
+	}
+
+	componentDidMount() {
+		this.setdays()
+	}
+
+	setdays() {
+		const date = new Date(this.state.year, this.state.month - 1, 1)
+		const day = date.getDay()
+		const lastdate = new Date(this.state.year, this.state.month, 1)
+		lastdate.setDate(0)
+		const lastday = lastdate.getDate()
+
+		let looper = 1
+		let weeks = []
+		const days = []
+		for(let d = 1; d <= lastday; d++) {
+			if(d === 1) {
+				if(day > 0) {
+					for(let blankday = (day - 1); blankday >= 0; blankday--) {
+						weeks.push({
+							blank: true,
+							day: null
+						})
+						looper++
+					}
+				}
+			}
+			weeks.push({
+				blank: false,
+				day: d
+			})
+			//
+			if((looper % 7) === 0) {
+				days.push(weeks)
+				weeks = []
+			}
+			if(d === lastday) {
+				if((looper % 7) !== 0) {
+					days.push(weeks)
+				}
+			}
+
+			looper++
+		}
+		this.setState({days: days})
+	}
+
+	clickPrevMonth() {
+		const date = new Date(this.state.year, this.state.month, 1)
+		const month = date.getMonth()
+		let m
+		if(month === 1) {
+			date.setFullYear(date.getFullYear() - 1)
+			m = 12
+		} else if(month === 0) {
+			date.setFullYear(date.getFullYear() - 1)
+			m = 11
+		} else {
+			m = month - 1
+		}
+		this.setState({
+			year: date.getFullYear(),
+			month: m
+		}, () => {
+			this.setdays()
+		})
+	}
+
+	clickNextMonth() {
+		const date = new Date(this.state.year, this.state.month, 1)
+		const month = date.getMonth()
+		let m
+		if(month >= 12) {
+			date.setFullYear(date.getFullYear() + 1)
+			m = 1
+		} else {
+			m = month + 1
+		}
+		this.setState({
+			year: date.getFullYear(),
+			month: m
+		}, () => {
+			this.setdays()
+		})
 	}
 
 	render() {
@@ -25,7 +117,7 @@ class Calendar extends React.Component {
 											className="fc-prev-button btn btn-primary"
 											title="Previus month"
 											aria-pressed="false"
-											onClick={() => this.props.clickPrevMonth()}
+											onClick={() => this.clickPrevMonth()}
 											>
 												<span className="fa fa-chevron-left"></span>
 											</button>
@@ -34,14 +126,14 @@ class Calendar extends React.Component {
 											className="fc-next-button btn btn-primary"
 											title="Next month"
 											aria-pressed="false"
-											onClick={() => this.props.clickNextMonth()}
+											onClick={() => this.clickNextMonth()}
 											>
 												<span className="fa fa-chevron-right"></span>
 											</button>
 										</div>
 									</div>
 									<div className="fc-toolbar-chunk">
-										<h2 id="fc-dom-month" className="fc-toolbar-title">{this.props.viewYear} {this.props.viewMonth}</h2>
+										<h2 id="fc-dom-month" className="fc-toolbar-title">{this.state.year}年{this.state.month}月</h2>
 									</div>
 									<div className="fc-toolbar-chunk">
 										<div className="btn-group">
@@ -111,8 +203,9 @@ class Calendar extends React.Component {
 																<div className="fc-daygrid-body fc-daygrid-body-unbalanced" style={{width: '100%', maxWidth: '2000px', minWidth: '805px'}}>
 																	<CalendarWeek
 																	clickDay={(year, month, day) => this.props.clickDay(year, month, day)}
-																	viewYear={this.props.viewYear}
-																	viewMonth={this.props.viewMonth}
+																	viewYear={this.state.year}
+																	viewMonth={this.state.month}
+																	days={this.state.days}
 																	/>
 																</div>
 															</div>

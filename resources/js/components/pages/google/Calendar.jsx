@@ -92,40 +92,6 @@ class Schedule extends React.Component {
 		this.setState({loading: false})
 	}
 
-	clickPrevMonth() {
-		const date = new Date(this.state.viewdates.year, this.state.viewdates.month, 1)
-		const month = date.getMonth()
-		if((month - 1) < 1) {
-			date.setFullYear(date.getFullYear() - 1)
-			date.setMonth(12)
-		} else {
-			date.setMonth(month - 1)
-		}
-		this.setState({
-			viewdates: {
-				year: date.getFullYear(),
-				month: date.getMonth()
-			}
-		})
-	}
-
-	clickNextMonth() {
-		const date = new Date(this.state.viewdates.year, this.state.viewdate.month, 1)
-		const month = date.getMonth()
-		if((month + 1) > 12) {
-			date.setFullYear(date.getFullYear() + 1)
-			date.setMonth(1)
-		} else {
-			date.setMonth(date.getMonth() + 1)
-		}
-		this.setState({
-			viewdates: {
-				year: date.getFullYear(),
-				month: date.getMonth()
-			}
-		})
-	}
-
 	activeSnsOAuth() {
 		this.setState({
 			snsauth: Object.assign(this.config.modals.snsauth, {
@@ -241,8 +207,6 @@ class Schedule extends React.Component {
 						clickDay={(year, month, day) => this.clickDay(year, month, day)}
 						viewYear={this.state.viewdates.year}
 						viewMonth={this.state.viewdates.month}
-						clickNextMonth={() => this.clickNextMonth()}
-						clickPrevMonth={() => this.clickPrevMonth()}
 					/>
 					<Modal
 						title={this.state.create.title}
