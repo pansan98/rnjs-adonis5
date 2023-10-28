@@ -35,8 +35,7 @@ export default class SnsOAuthToken extends BaseModel {
 		if(!OAuthToken) return false
 
 		const now = new Date()
-		const expire = OAuthToken.created_token_at + OAuthToken.expire
-		return expire > now.getTime()
+		return OAuthToken.expire > now.getTime()
 	}
 
 	public static async exists(user_id: number, sns: string) {
