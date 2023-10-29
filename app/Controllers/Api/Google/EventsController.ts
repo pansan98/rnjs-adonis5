@@ -23,6 +23,7 @@ export default class EventsController extends GoogleController {
 			})
 		}
 
+		// イベント情報を取得
 		const OAuthToken = await SnsOAuthToken.exists(user.id, 'google')
 		if(!OAuthToken) return this.fail(ctx)
 		const calendar = new GoogleCalendar()
@@ -32,7 +33,6 @@ export default class EventsController extends GoogleController {
 			expireMin: (queries?.expire_min) ? parseInt(queries.expire_min) : undefined
 		})
 
-		// イベント情報をとる
 		return this.success(ctx, {
 			auth: true,
 			events: events
@@ -60,8 +60,39 @@ export default class EventsController extends GoogleController {
 			})
 		}
 
-		return this.success(ctx, {
-			auth: true
+		const OAuthToken = await SnsOAuthToken.exists(user.id, 'google')
+		if(!OAuthToken) return this.fail(ctx)
+
+		const summary = await ctx.request.input('title')
+		const description = await ctx.request.input('description')
+		const date = await ctx.request.input('date')
+		if(date?.year && date?.month && date?.day) {
+			const calendar = new GoogleCalendar()
+			const start = new Date(date.year, date.month, date.day)
+			start.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" })
+			const end = new Date(date.year, date.month, date.day)
+			end.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" })
+			const res = await calendar.create(OAuthToken, {
+				summary: summary,
+				description: description,
+				start: {
+					dateTime: start.toISOString(),
+					timeZone: 'Asia/Tokyo'
+				},
+				end: {
+					dateTime: end.toISOString(),
+					timeZone: 'Asia/Tokyo'
+				}
+			})
+			if(res) {
+				return this.success(ctx)
+			}
+		}
+
+		return this.fail(ctx, {
+			errors: {
+				system: ['イベントの作成に失敗しました。']
+			}
 		})
 	}
 }

@@ -4,11 +4,11 @@ import path from 'node:path'
 
 class Logger {
 	public static async info(trace: any) {
-		const log: string = Logger.getpath('info')
-		Logger.logexists(log)
+		// const log: string = Logger.getpath('info')
+		// Logger.logexists(log)
 		log4js.configure('./.log4js-config.json')
 		const logger = log4js.getLogger()
-		logger.addContext('logpath', log)
+		//logger.addContext('logpath', log)
 		logger.info(trace)
 	}
 

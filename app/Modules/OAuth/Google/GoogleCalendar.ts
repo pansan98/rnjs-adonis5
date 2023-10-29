@@ -51,14 +51,41 @@ export default class GoogleCalendar extends ModuleOAuth {
 	}
 
 	// イベント追加
-	public async create(OAuthToken: SnsOAuthToken) {
+	public async create(OAuthToken: SnsOAuthToken, event: {
+		summary: string,
+		location?: string,
+		description?: string,
+		start: {
+			dateTime: string,
+			timeZone: string
+		},
+		end?: {
+			dateTime: string,
+			timeZone: string
+		},
+		attendees?: [
+			{email: string}
+		]
+	}) {
 		const googleOAuth = new google.auth.OAuth2(this.client_id, this.secret_key, this.redirect_uri)
 		googleOAuth.setCredentials({
 			access_token: OAuthToken.token
 		})
 		const calendar = google.calendar('v3')
-		calendar.events.insert({
-			auth: googleOAuth
+		const res = await calendar.events.insert({
+			auth: googleOAuth,
+			calendarId: OAuthToken.event_id,
+			requestBody: event
+		}).then((response) => {
+			Logger.info(response)
+			return response
+		}).catch((e) => {
+			Logger.info(e)
 		})
+
+		if(res?.status === 200) {
+			return true
+		}
+		return false
 	}
 }

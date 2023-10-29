@@ -163,7 +163,7 @@ class Schedule extends React.Component {
 				title: title,
 				active: true,
 				closefn: () => {this.closeCreate()},
-				callbackfn: () => {this.eventCreate()}
+				callbackfn: () => {this.eventCreate(year, month, day)}
 			})
 		})
 	}
@@ -173,14 +173,16 @@ class Schedule extends React.Component {
 		await Utils.apiHandler('post', Config.api.google.event.create, {
 			date: {
 				year: year,
-				month: month,
+				month: (month - 1),
 				day: day
 			},
 			title: this.state.title,
 			description: this.state.description
 		}).then((json) => {
-			if(json.result) {
+			if(json.data.result) {
 				this.closeCreate()
+			} else {
+				this.setState({errors: json.data.errors})
 			}
 		}).catch((e) => {
 			if(e.response.status === 400) {
@@ -240,6 +242,7 @@ class Schedule extends React.Component {
 						active={this.state.create.active}
 						classes={this.state.create.classes}
 						success={this.state.create.success}
+						success_text={this.state.create.success_text}
 						closefn={this.state.create.closefn}
 						callbackfn={this.state.create.callbackfn}
 					>
