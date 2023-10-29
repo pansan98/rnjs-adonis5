@@ -2,6 +2,7 @@ import Env from '@ioc:Adonis/Core/Env'
 import {google} from 'googleapis'
 
 import ModuleOAuth from 'App/Modules/OAuth'
+import Logger from 'App/Modules/Logger'
 
 import SnsOAuthToken from 'App/Models/SnsOAuthToken'
 
@@ -16,7 +17,7 @@ export default class GoogleCalendar extends ModuleOAuth {
 	}
 
 	// イベント取得
-	list(OAuthToken: SnsOAuthToken, options: {
+	public async list(OAuthToken: SnsOAuthToken, options: {
 		expireMin?: number,
 		expireMax?: number
 	}) {
@@ -24,11 +25,33 @@ export default class GoogleCalendar extends ModuleOAuth {
 		googleOAuth.setCredentials({
 			access_token: OAuthToken.token
 		})
+		let expire_min: string | undefined
+		let expire_max: string | undefined
+		if(options?.expireMin) {
+			const expire_min_date = new Date(options.expireMin)
+			expire_min_date.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" })
+			expire_min = expire_min_date.toISOString()
+		}
+		if(options?.expireMax) {
+			const expire_max_date = new Date(options.expireMax)
+			expire_max_date.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" })
+			expire_max = expire_max_date.toISOString()
+		}
+		
+		const calendar = google.calendar({version: 'v3', auth: googleOAuth})
+		const res = await calendar.events.list({
+			calendarId: OAuthToken.event_id,
+			timeMin: expire_min,
+			timeMax: expire_max,
+			timeZone: 'Asia/Tokyo'
+		})
 
+		const events = res.data.items
+		return (events) ? events : []
 	}
 
 	// イベント追加
-	create(OAuthToken: SnsOAuthToken) {
+	public async create(OAuthToken: SnsOAuthToken) {
 		const googleOAuth = new google.auth.OAuth2(this.client_id, this.secret_key, this.redirect_uri)
 		googleOAuth.setCredentials({
 			access_token: OAuthToken.token

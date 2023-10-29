@@ -24,9 +24,11 @@ export default class GoogleOAuthController {
 				const tokens = await oauth.oauthVerify(code)
 				if(tokens?.access_token && tokens?.refresh_token && tokens?.expiry_date) {
 					const dataOAuth = await SnsOAuthToken.exists(user.id, 'google')
+					const event_id = await oauth.myEventId(tokens.access_token)
 					if(!dataOAuth) {
 						await SnsOAuthToken.create({
 							user_id: user.id,
+							event_id: event_id,
 							sns: 'google',
 							token: tokens.access_token,
 							refresh_token: tokens.refresh_token,
@@ -35,6 +37,7 @@ export default class GoogleOAuthController {
 						})
 					} else {
 						dataOAuth.merge({
+							event_id: event_id,
 							token: tokens.access_token,
 							refresh_token: tokens.refresh_token,
 							created_token_at: new Date().getTime(),

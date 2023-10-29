@@ -2,6 +2,9 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import GoogleController from 'App/Controllers/Api/Google/BasesController'
 import EventsCreateValidator from 'App/Validators/Google/EventsCreate'
+import GoogleCalendar from 'App/Modules/OAuth/Google/GoogleCalendar'
+
+import SnsOAuthToken from 'App/Models/SnsOAuthToken'
 
 export default class EventsController extends GoogleController {
 	public async events(ctx: HttpContextContract) {
@@ -19,10 +22,20 @@ export default class EventsController extends GoogleController {
 				}
 			})
 		}
+
+		const OAuthToken = await SnsOAuthToken.exists(user.id, 'google')
+		if(!OAuthToken) return this.fail(ctx)
+		const calendar = new GoogleCalendar()
+		const queries = ctx.request.qs()
+		const events = await calendar.list(OAuthToken, {
+			expireMax: (queries?.expire_max) ? parseInt(queries.expire_max) : undefined,
+			expireMin: (queries?.expire_min) ? parseInt(queries.expire_min) : undefined
+		})
+
 		// イベント情報をとる
 		return this.success(ctx, {
 			auth: true,
-			events: []
+			events: events
 		})
 	}
 

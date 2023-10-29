@@ -20,7 +20,7 @@ export default class GoogleOAuth extends ModuleOAuth {
 	}
 
 	public async auth(user_id: number) {
-		return this.checkToken(user_id)
+		return await this.checkToken(user_id)
 	}
 
 	public async redirect_oauth() {
@@ -44,9 +44,14 @@ export default class GoogleOAuth extends ModuleOAuth {
 			Logger.info(e)
 			return null
 		})
-		// gmailが必要(リフレッシュトークン時も)
-		googleOAuth.getTokenInfo('')
 		return tokens
+	}
+
+	public async myEventId(access_token: string) {
+		const redirect_uri = Env.get('OAUTH_GOOGLE_REDIRECT_URI')
+		const googleOAuth = new google.auth.OAuth2(this.client_id, this.secret_key, redirect_uri)
+		const info = await googleOAuth.getTokenInfo(access_token)
+		return info?.email
 	}
 
 	protected async checkToken(user_id: number) {
@@ -55,6 +60,7 @@ export default class GoogleOAuth extends ModuleOAuth {
 			.where('sns', 'google')
 			.first()
 		if(snsToken) {
+			if(!snsToken.event_id) return false
 			if(SnsOAuthToken.expire(snsToken)) return true
 			const token = await this.refreshToken(snsToken)
 			if(token) {

@@ -11,6 +11,9 @@ export default class SnsOAuthToken extends BaseModel {
 	public user_id: number
 
 	@column()
+	public event_id: string
+
+	@column()
 	public sns: string
 
 	@column()

@@ -77,6 +77,7 @@ class Calendar extends React.Component {
 			year: date.getFullYear(),
 			month: m
 		}, () => {
+			this.props.changeMonthCallback(this.state.year, this.state.month)
 			this.setdays()
 		})
 	}
@@ -95,6 +96,7 @@ class Calendar extends React.Component {
 			year: date.getFullYear(),
 			month: m
 		}, () => {
+			this.props.changeMonthCallback(this.state.year, this.state.month)
 			this.setdays()
 		})
 	}
@@ -228,8 +230,7 @@ class Calendar extends React.Component {
 Calendar.defaultProps = {
 	viewYear: '',
 	viewMonth: '',
-	clickPrevMonth: () => {},
-	clickNextMonth: () => {}
+	changeMonthCallback: (year, month) => {}
 }
 
 export default Calendar

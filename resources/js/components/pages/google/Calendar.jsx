@@ -1,5 +1,4 @@
 import React from 'react'
-import {Link} from 'react-router-dom'
 
 import Config from '../../../config'
 import Utils from '../../../plugins/Utils'
@@ -39,21 +38,16 @@ class Schedule extends React.Component {
 			}
 		}
 
-		const now = new Date()
-
 		this.state = {
 			loading: false,
 			title: '',
 			description: '',
 			oauthredirect: '',
+			events: [],
 			connected: false,
 			errors: {
 				system: [],
 				title: []
-			},
-			viewdates: {
-				year: now.getFullYear(),
-				month: (now.getMonth() + 1)
 			},
 			create: {
 				active: this.config.modals.create.active,
@@ -76,22 +70,55 @@ class Schedule extends React.Component {
 	}
 
 	componentDidMount() {
-		this.events()
+		const now = new Date()
+		const year = now.getFullYear()
+		const month = now.getMonth() + 1
+		const [expire_min, expire_max] = this.getRange(year, month)
+
+		this.events(expire_min, expire_max)
 	}
 
-	async events() {
+	// Google カレンダーからイベントを取得
+	async events(expire_min, expire_max) {
+		const queries = new URLSearchParams({
+			expire_min: expire_min,
+			expire_max: expire_max
+		})
 		this.setState({loading: true})
-		await Utils.api('GET', Config.api.google.event.events).then((json) => {
+		await Utils.api('GET', Config.api.google.event.events+'?'+queries.toString()).then((json) => {
 			if(!json.auth) {
 				this.setState({oauthredirect: json.data.redirect_url})
 				this.activeSnsOAuth()
 			} else {
-				this.setState({connected: true})
+				if(!this.state.connected) {
+					this.setState({connected: true})
+				}
+				console.log(json.events)
+				this.setState({events: json.events})
 			}
 		})
 		this.setState({loading: false})
 	}
 
+	// 初日と月末を取得
+	getRange(year, month) {
+		const expire_min = new Date(year, month - 1, 1)
+		expire_min.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" })
+		
+		const expire_max = new Date(year, month, 1)
+		expire_max.setDate(0)
+		expire_max.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" })
+
+		return [expire_min.getTime(), expire_max.getTime()]
+	}
+
+	// 月が変わったとき
+	async changeMonth(year, month) {
+		const [expire_min, expire_max] = this.getRange(year, month)
+		await this.events(expire_min, expire_max)
+	}
+
+	// OAuthのモーダルを表示
 	activeSnsOAuth() {
 		this.setState({
 			snsauth: Object.assign(this.config.modals.snsauth, {
@@ -102,6 +129,7 @@ class Schedule extends React.Component {
 		})
 	}
 
+	// Googleの連携
 	connectSnsOAuth() {
 		window.location = this.state.oauthredirect
 	}
@@ -205,8 +233,7 @@ class Schedule extends React.Component {
 				<div>
 					<Calendar
 						clickDay={(year, month, day) => this.clickDay(year, month, day)}
-						viewYear={this.state.viewdates.year}
-						viewMonth={this.state.viewdates.month}
+						changeMonthCallback={(year, month) => this.changeMonth(year, month)}
 					/>
 					<Modal
 						title={this.state.create.title}
