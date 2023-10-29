@@ -19,11 +19,13 @@ class Week extends React.Component {
 										key={`day-${dk}`}
 										day={date.day}
 										week={wk}
+										events={date.events}
 										isblank={date.blank}
 										date={`${this.props.viewYear}-${this.props.viewMonth}-${date.day}`}
 										viewYear={this.props.viewYear}
 										viewMonth={this.props.viewMonth}
 										clickDay={(year, month, day) => this.props.clickDay(year, month, day)}
+										clickEventDestroy={(calendar_id) => this.props.clickEventDestroy(calendar_id)}
 									/>
 								)
 							})}
@@ -45,7 +47,8 @@ class Week extends React.Component {
 
 Week.defaultProps = {
 	viewYear: '',
-	viewMonth: ''
+	viewMonth: '',
+	days: []
 }
 
 export default Week

@@ -25,6 +25,21 @@ class Calendar extends React.Component {
 		lastdate.setDate(0)
 		const lastday = lastdate.getDate()
 
+		const events = {}
+		this.props.events.map((event) => {
+			if(event.start.dateTime) {
+				const date = new Date(event.start.dateTime)
+				date.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" })
+				if(typeof events[date.getDate()] === 'undefined') {
+					events[date.getDate()] = []
+				}
+				events[date.getDate()].push({
+					summary: event.summary,
+					description: event.description,
+					calendar_id: event.id
+				})
+			}
+		})
 		let looper = 1
 		let weeks = []
 		const days = []
@@ -34,7 +49,8 @@ class Calendar extends React.Component {
 					for(let blankday = (day - 1); blankday >= 0; blankday--) {
 						weeks.push({
 							blank: true,
-							day: null
+							day: null,
+							events: []
 						})
 						looper++
 					}
@@ -42,7 +58,8 @@ class Calendar extends React.Component {
 			}
 			weeks.push({
 				blank: false,
-				day: d
+				day: d,
+				events: (typeof events[d] !== 'undefined') ? events[d] : []
 			})
 			//
 			if((looper % 7) === 0) {
@@ -205,6 +222,7 @@ class Calendar extends React.Component {
 																<div className="fc-daygrid-body fc-daygrid-body-unbalanced" style={{width: '100%', maxWidth: '2000px', minWidth: '805px'}}>
 																	<CalendarWeek
 																	clickDay={(year, month, day) => this.props.clickDay(year, month, day)}
+																	clickEventDestroy={(calendar_id) => this.props.clickEventDestroy(calendar_id)}
 																	viewYear={this.state.year}
 																	viewMonth={this.state.month}
 																	days={this.state.days}
@@ -228,8 +246,8 @@ class Calendar extends React.Component {
 }
 
 Calendar.defaultProps = {
-	viewYear: '',
-	viewMonth: '',
+	events: [],
+	clickDay: (year, month, day) => {},
 	changeMonthCallback: (year, month) => {}
 }
 

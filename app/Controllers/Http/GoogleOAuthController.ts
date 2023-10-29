@@ -37,7 +37,7 @@ export default class GoogleOAuthController {
 						})
 					} else {
 						dataOAuth.merge({
-							event_id: event_id,
+							event_id: (dataOAuth.event_id) ? dataOAuth.event_id : event_id,
 							token: tokens.access_token,
 							refresh_token: tokens.refresh_token,
 							created_token_at: new Date().getTime(),

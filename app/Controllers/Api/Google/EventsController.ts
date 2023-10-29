@@ -61,7 +61,7 @@ export default class EventsController extends GoogleController {
 		}
 
 		const OAuthToken = await SnsOAuthToken.exists(user.id, 'google')
-		if(!OAuthToken) return this.fail(ctx)
+		if(!OAuthToken) return this.fail(ctx, {errors: {system: ['Googleと連携できていません。']}})
 
 		const summary = await ctx.request.input('title')
 		const description = await ctx.request.input('description')
@@ -92,6 +92,33 @@ export default class EventsController extends GoogleController {
 		return this.fail(ctx, {
 			errors: {
 				system: ['イベントの作成に失敗しました。']
+			}
+		})
+	}
+
+	public async destroy(ctx: HttpContextContract) {
+		const user = await this.ud(ctx)
+		if(!user) return this.fail(ctx, {
+			errors: {
+				system: ['ログインしてください。']
+			}
+		})
+
+		const OAuthToken = await SnsOAuthToken.exists(user.id, 'google')
+		if(!OAuthToken) return this.fail(ctx, {errors: {system: ['Googleと連携できていません。']}})
+
+		const auth = this.googleOAuth.auth(user.id)
+		if(!auth) return this.fail(ctx, {errors: {system: ['Googleと連携できていません。']}})
+
+		const calendar_id = await ctx.request.param('calendar_id')
+		const calendar = new GoogleCalendar()
+		const res = await calendar.destroy(OAuthToken, calendar_id)
+		if(res) {
+			return this.success(ctx)
+		}
+		return this.fail(ctx, {
+			errors: {
+				system: ['イベントの削除に失敗しました。']
 			}
 		})
 	}

@@ -93,7 +93,6 @@ class Schedule extends React.Component {
 				if(!this.state.connected) {
 					this.setState({connected: true})
 				}
-				console.log(json.events)
 				this.setState({events: json.events})
 			}
 		})
@@ -192,6 +191,15 @@ class Schedule extends React.Component {
 		this.setState({loading: false})
 	}
 
+	async eventDestroy(calendar_id) {
+		this.setState({loading: true})
+		await Utils.apiHandler('post', Config.api.google.event.destroy+calendar_id).catch((e) => {
+			console.log(e)
+			return
+		})
+		this.setState({loading: false})
+	}
+
 	closeCreate() {
 		this.setState({
 			title: '',
@@ -236,6 +244,8 @@ class Schedule extends React.Component {
 					<Calendar
 						clickDay={(year, month, day) => this.clickDay(year, month, day)}
 						changeMonthCallback={(year, month) => this.changeMonth(year, month)}
+						events={this.state.events}
+						clickEventDestroy={(calendar_id) => this.eventDestroy(calendar_id)}
 					/>
 					<Modal
 						title={this.state.create.title}

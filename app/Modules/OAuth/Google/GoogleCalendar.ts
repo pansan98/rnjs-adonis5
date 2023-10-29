@@ -88,4 +88,26 @@ export default class GoogleCalendar extends ModuleOAuth {
 		}
 		return false
 	}
+
+	public async destroy(OAuthToken: SnsOAuthToken, calendar_id: string) {
+		const googleOAuth = new google.auth.OAuth2(this.client_id, this.secret_key, this.redirect_uri)
+		googleOAuth.setCredentials({
+			access_token: OAuthToken.token
+		})
+		const calendar = google.calendar('v3')
+		const res = await calendar.events.delete({
+			auth: googleOAuth,
+			eventId: calendar_id,
+			calendarId: OAuthToken.event_id
+		}).then((response) => {
+			return response
+		}).catch((e) => {
+			Logger.info(e)
+		})
+		
+		if(res?.status === 200) {
+			return true
+		}
+		return false
+	}
 }
